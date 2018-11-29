@@ -9,8 +9,7 @@
 
 	$athletes = readAthletes( $debug );
 
-
-	var_dump( readAthleteResults( $athletes[0] ) );
+	var_dump( readAthleteResults( 2, $athletes[0] ) );
 
 ?>
 </pre>

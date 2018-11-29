@@ -218,7 +218,7 @@ function resultCmp($a, $b) {
  *  Reads the results for a given athlete from the power of 10. Returns an array of result objetcts.
  */
 function readAthleteResults($debug, $powerOf10Id) {
-
+echo( 'started' );
 	$disciplines = getDisciplines();	
 	$results = array();
 

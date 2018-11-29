@@ -9,8 +9,9 @@
 	require_once( 'keyfunctions.php' );
 
 	$athletes = readAthletes( $debug );
-
+echo( 'about to read athlete results' );
 	var_dump( readAthleteResults( 2, $athletes[0] ) );
+echo( 'done' );
 
 ?>
 </pre>

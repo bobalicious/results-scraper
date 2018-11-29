@@ -36,10 +36,19 @@ function readAthletes($debug) {
 			continue;
 		}
 		
-		var_dump( $cells );
+		$linkExpr= '/<a href="(.*?)">.*/';
+		preg_match_all( $linkExpr, $profileCell, $matches );
+		if (count($matches[1])<1) {
+			if ($debug>1) {
+				echo("Skipping row, not an athlete record. Should contain href at cell 8.<br/>");
+			}
+			continue;
+		}
 
 		$firstName   = $cells[0];
 		$secondName  = $cells[1];
+		$category1   = $cells[2];
+		$category2   = $cells[3];
 		$gender      = $cells[5];
 		$dob         = $cells[6];
 		$profileCell = $cells[8];
@@ -47,31 +56,26 @@ function readAthletes($debug) {
 		if ( empty($dob) || $dob=='&nbsp;' ) {
 			$dob = '';
 		}
-		
-		$linkExpr= '/<a href="(.*?)">.*/';
-		preg_match_all($linkExpr,$profileCell,$matches);
-		if (count($matches[1])<1) {
-			if ($debug>1) {
-				echo("Skipping row, not an athlete record. Should contain href at cell 8.<br/>");
-			}
-			continue;
-		}
-		$link = $matches[1][0];
-		$name = trim($firstName.' '.$secondName);
+
+		$link    = $matches[1][0];
+		$name    = trim($firstName.' '.$secondName);
 		$pattern = strtoupper( substr($name,0,1) ) .'%'.strtoupper( $secondName );
 		
 		$idExpr= '/.*?athleteid=(\d+).*?/';
 		preg_match($idExpr,$link,$matches);
 		$id = $matches[1];
 		
-		$athlete = array('name'=> $name,
-			'link'=>$link,
-			'gender'=>$gender,
-			'dob'=>$dob,
-			'id'=>$id,
-			'pattern'=>$pattern);
-		array_push($athletes, $athlete);
+		$athlete = array(
+			'name'     => $name,
+			'link'     => $link,
+			'gender'   => $gender,
+			'dob'      => $dob,
+			'id'       => $id,
+			'pattern'  => $pattern );
+
+		array_push( $athletes, $athlete );
 	}
+
 	return $athletes;
 }
 

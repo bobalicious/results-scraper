@@ -2,7 +2,7 @@
 <?php
 
 	set_time_limit ( 60*60 ); // 1 hour 
-	$debug = 0;
+	$debug = 1;
 
 
 	require_once( 'powerof10.php' );

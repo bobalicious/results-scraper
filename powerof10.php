@@ -30,7 +30,7 @@ function readAthletes($debug) {
 		$cells = $matches[1];
 		if(count($cells)!=10) {
 			if ($debug>1) {
-				echo("Skipping row, not an athlete record. Should contain 10 cells.<br/>");
+				echo("Skipping row, not an athlete record. Should contain 10 cells. Actually contains ".count($cells)."<br/>");
 			}
 			continue;
 		}

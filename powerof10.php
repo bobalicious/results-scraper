@@ -13,11 +13,18 @@
  */
 function readAthletes($debug) {
 	$text = getRemoteData('http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers');
+
+	echo( $text );
+
 	$athletes = array();
 	$rowExpr = '@\s*(<td.*?>.*?</td>)+\s*@';
 	preg_match_all($rowExpr,$text,$matches);
 	$rows = $matches[0];
+
+	echo( $rows );
+
 	foreach ($rows as $row) {
+
 		$cellExpr= '@<td.*?>(.*?)</td>@';
 		preg_match_all($cellExpr,$row,$matches);
 		$cells = $matches[1];

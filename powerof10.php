@@ -1,5 +1,13 @@
 <?php
 
+//ini_set('display_startup_errors',1);
+//ini_set('display_errors',1);
+//error_reporting(-1);
+//require_once('../lib/functions.php');
+//require 'navbar.php';
+
+
+
 /**
  *   Read the data for each athlete from the power of 10. Returns an array of athlete objects.
  */
@@ -8,7 +16,7 @@ function readAthletes($debug) {
 	$text = getRemoteData('http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers');
 
 	$athletes = array();
-	$rowExpr = '/(<td.*?>.*?</td>)/';
+	$rowExpr = '/s*(<tr.*?>.*?<\/tr>)+\s*/';
 	preg_match_all($rowExpr,$text,$matches);
 	$rows = $matches[0];
 
@@ -16,7 +24,7 @@ function readAthletes($debug) {
 
 	foreach ($rows as $row) {
 
-		$cellExpr= '@<td.*?>(.*?)</td>@';
+		$cellExpr= '/<td.*?>(.*?)<\/td>/';
 		preg_match_all($cellExpr,$row,$matches);
 		$cells = $matches[1];
 		if(count($cells)!=10) {
@@ -36,7 +44,7 @@ function readAthletes($debug) {
 			$dob = '';
 		}
 		
-		$linkExpr= '@<a href="(.*?)">.*@';
+		$linkExpr= '/<a href="(.*?)">.*/';
 		preg_match_all($linkExpr,$profileCell,$matches);
 		if (count($matches[1])<1) {
 			if ($debug>1) {
@@ -48,7 +56,7 @@ function readAthletes($debug) {
 		$name = trim($firstName.' '.$secondName);
 		$pattern = strtoupper( substr($name,0,1) ) .'%'.strtoupper( $secondName );
 		
-		$idExpr= '@.*?athleteid=(\d+).*?@';
+		$idExpr= '/.*?athleteid=(\d+).*?/';
 		preg_match($idExpr,$link,$matches);
 		$id = $matches[1];
 		

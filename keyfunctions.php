@@ -219,7 +219,8 @@ function resultCmp($a, $b) {
  */
 function readAthleteResults($debug, $powerOf10Id) {
 echo( 'started' );
-	$disciplines = getDisciplines();	
+
+//	$disciplines = getDisciplines();
 	$results = array();
 
 	if ($debug) {
@@ -281,6 +282,7 @@ echo( 'started' );
 			continue;
 		}
 		$discipline = $result['discipline'];
+		/*
 		if (key_exists($discipline,$disciplines)) {
 			if (!key_exists($discipline,$pbs )
 					|| $performance<$pbs[$discipline]) {
@@ -288,6 +290,7 @@ echo( 'started' );
 				$results[$i]['pb'] = true;
 			}
 		}
+		*/
 	}
 	return $results;
 }

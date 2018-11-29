@@ -48,12 +48,12 @@ function readAthletes( $debug ) {
 			continue;
 		}
 
-		$firstName   = $cells[0];
-		$secondName  = $cells[1];
-		$category1   = $cells[2];
-		$category2   = $cells[3];
-		$gender      = $cells[5];
-		$dob         = $cells[6];
+		$firstName     = $cells[0];
+		$secondName    = $cells[1];
+		$trackCategory = $cells[2];
+		$roadCategory  = $cells[3];
+		$xcCategory    = $cells[4];
+		$gender        = $cells[5];
 		
 		if ( empty( $dob ) || $dob=='&nbsp;' ) {
 			$dob = '';
@@ -68,12 +68,13 @@ function readAthletes( $debug ) {
 		$id = $matches[1];
 		
 		$athlete = array(
-			'name'     => $name,
-			'link'     => $link,
-			'gender'   => $gender,
-			'dob'      => $dob,
-			'id'       => $id,
-			'pattern'  => $pattern );
+			'name'          => $name,
+			'link'          => $link,
+			'gender'        => $gender,
+			'trackCategory' => $trackCategory,
+			'roadCategory'  => $roadCategory,
+			'xcCategory'    => $xcCategory,
+			'pattern'       => $pattern );
 
 		array_push( $athletes, $athlete );
 	}

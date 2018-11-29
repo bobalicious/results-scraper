@@ -6,6 +6,7 @@
 
 
 	require_once( 'powerof10.php' );
+	require_once( 'keyfunctions.php' );
 
 	var_dump( readAthletes( $debug ) );
 

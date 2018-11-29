@@ -11,7 +11,7 @@
 /**
  *   Read the data for each athlete from the power of 10. Returns an array of athlete objects.
  */
-function readAthletes($debug) {
+function readAthletes( $debug ) {
 
 	$text = getRemoteData( 'http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers' );
 
@@ -31,16 +31,19 @@ function readAthletes($debug) {
 
 		if( count( $cells ) != 9) {
 			if ( $debug > 1 ) {
-				echo("Skipping row, not an athlete record. Should contain 10 cells. Actually contains " . count($cells) . "<br/>");
+				echo( "Skipping row, not an athlete record. Should contain 10 cells. Actually contains " . count( $cells ) . "<br/>" );
 			}
 			continue;
 		}
-		
+
+		$profileCell = $cells[8];
+
 		$linkExpr= '/<a href="(.*?)">.*/';
 		preg_match_all( $linkExpr, $profileCell, $matches );
-		if (count($matches[1])<1) {
-			if ($debug>1) {
-				echo("Skipping row, not an athlete record. Should contain href at cell 8.<br/>");
+
+		if ( count( $matches[1] ) < 1 ) {
+			if ( $debug > 1 ) {
+				echo( "Skipping row, not an athlete record. Should contain href at cell 8.<br/>" );
 			}
 			continue;
 		}
@@ -51,15 +54,14 @@ function readAthletes($debug) {
 		$category2   = $cells[3];
 		$gender      = $cells[5];
 		$dob         = $cells[6];
-		$profileCell = $cells[8];
 		
-		if ( empty($dob) || $dob=='&nbsp;' ) {
+		if ( empty( $dob ) || $dob=='&nbsp;' ) {
 			$dob = '';
 		}
 
 		$link    = $matches[1][0];
 		$name    = trim($firstName.' '.$secondName);
-		$pattern = strtoupper( substr($name,0,1) ) .'%'.strtoupper( $secondName );
+		$pattern = strtoupper( substr( $name, 0, 1 ) ) . '%' . strtoupper( $secondName );
 		
 		$idExpr= '/.*?athleteid=(\d+).*?/';
 		preg_match($idExpr,$link,$matches);

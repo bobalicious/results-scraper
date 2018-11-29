@@ -252,15 +252,17 @@ echo( 'started' );
 			continue;
 		}
 		$result = array(
-		'discipline' => trim($cells[0]),
-		'performance' => trim($cells[1]),
-		'chip' =>  trim($cells[4]),
-		'pos' => intval(trim($cells[5])),
-		'catPos' => intval(trim($cells[8])),
-		'venue' => trim($cells[9]),
-		'event' => trim($cells[10]),
-		'date' => britishToSql($cells[11]),
-		'pb' => '0');
+						'discipline'  => trim($cells[0]),
+						'performance' => trim($cells[1]),
+						'chip'        => trim($cells[4]),
+						'pos'         => intval(trim($cells[5])),
+						'catPos'      => intval(trim($cells[8])),
+						'venue'       => trim($cells[9]),
+						'event'       => trim($cells[10]),
+						'date'        => $cells[11],
+						'pb'          => '0'
+						);
+
 		if (empty($result['pos'])) $result['pos']=null;
 		if (empty($result['catPos'])) $result['catPos']=null;
 		$perf = $result['performance'];

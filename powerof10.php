@@ -13,13 +13,14 @@
  */
 function readAthletes($debug) {
 
-	$text = getRemoteData('http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers');
+	$text = getRemoteData( 'http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers' );
 
 	$athletes = array();
-	$rowExpr = '/s*(<tr.*?>.*?<\/tr>)+\s*/';
-	preg_match_all($rowExpr,$text,$matches);
-	$rows = $matches[0];
 
+	$rowExpr  = '/s*(<td.*?>.*?<\/td>)+\s*/';     // assumes that a single row appears on a single line
+	preg_match_all( $rowExpr, $text, $matches );
+
+	$rows = $matches[0];
 	var_dump( $rows );
 
 	foreach ($rows as $row) {

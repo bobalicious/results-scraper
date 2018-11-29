@@ -23,25 +23,27 @@ function readAthletes($debug) {
 	$rows = $matches[0];
 	var_dump( $rows );
 
-	foreach ($rows as $row) {
+	foreach ( $rows as $row ) {
 
 		$cellExpr= '/<td.*?>(.*?)<\/td>/';
-		preg_match_all($cellExpr,$row,$matches);
+		preg_match_all( $cellExpr, $row, $matches );
+
 		$cells = $matches[1];
-		if(count($cells)!=10) {
-			if ($debug>1) {
+
+		if( count( $cells ) != 9) {
+			if ( $debug > 1 ) {
 				echo("Skipping row, not an athlete record. Should contain 10 cells. Actually contains ".count($cells)."<br/>");
 			}
 			continue;
 		}
 		
-		$firstName = $cells[0];
-		$secondName = $cells[1];
-		$gender = $cells[5];
-		$dob = britishToSql($cells[6]);
+		$firstName   = $cells[0];
+		$secondName  = $cells[1];
+		$gender      = $cells[5];
+		$dob         = britishToSql($cells[6]);
 		$profileCell = $cells[8];
 		
-		if (empty($dob) || $dob=='&nbsp;') {
+		if ( empty($dob) || $dob=='&nbsp;' ) {
 			$dob = '';
 		}
 		

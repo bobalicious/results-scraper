@@ -1,15 +1,10 @@
-<h1>Power of 10 Download</h1>
 <?php
 
 //ini_set('display_startup_errors',1);
 //ini_set('display_errors',1);
 //error_reporting(-1);
-require_once('../lib/functions.php');
-require 'navbar.php';
-
-set_time_limit ( 60*60 ); // 1 hour 
-
-$debug = 1;
+//require_once('../lib/functions.php');
+//require 'navbar.php';
 
 
 
@@ -70,6 +65,7 @@ function readAthletes($debug) {
 	return $athletes;
 }
 
+/*
 
 
 $conn = initDatabase();
@@ -134,6 +130,6 @@ while ($row = $res->fetch_assoc()) {
 }
 
 $conn->close();
-
+*/
 
 ?>

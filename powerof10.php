@@ -12,16 +12,15 @@
  *   Read the data for each athlete from the power of 10. Returns an array of athlete objects.
  */
 function readAthletes($debug) {
+
 	$text = getRemoteData('http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers');
 
-	echo( $text );
-
 	$athletes = array();
-	$rowExpr = '@\s*(<td.*?>.*?</td>)+\s*@';
+	$rowExpr = '/s*(<td.*?>.*?</td>)+\s*/';
 	preg_match_all($rowExpr,$text,$matches);
 	$rows = $matches[0];
 
-	echo( $rows );
+	var_dump( $rows );
 
 	foreach ($rows as $row) {
 

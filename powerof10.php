@@ -6,6 +6,8 @@
 //require_once('../lib/functions.php');
 //require 'navbar.php';
 
+define( 'RACES_BASE_URL'   , 'http://www.thepowerof10.info/results/resultslookup.aspx' );
+define( 'ATHLETES_BASE_URL', 'http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers' );
 
 
 /**
@@ -13,7 +15,7 @@
  */
 function readAthletes( $debug ) {
 
-	$text = getRemoteData( 'http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers' );
+	$text = getRemoteData( ATHLETES_BASE_URL );
 
 	$athletes = array();
 
@@ -80,6 +82,16 @@ function readAthletes( $debug ) {
 	}
 
 	return $athletes;
+}
+
+function readRaces() {
+
+	$text = getRemoteData( RACES_BASE_URL );
+
+
+
+
+
 }
 
 /*

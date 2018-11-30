@@ -21,7 +21,7 @@ echo( 'done' );
 		if ( $_GET['mode'] == 'races' ) {
 			$return = readRaces( 0 );
 		}
-/*
+
 		if ( $_GET['mode'] == 'athletes' ) {
 			$return = readAthletes( 0 );
 		}
@@ -30,7 +30,7 @@ echo( 'done' );
 			$athleteId = $_GET['id'];
 			$return = readAthleteResults( 0, $athleteId );
 		}
-*/
+
 	}
 
 	echo( json_encode( $return ) );

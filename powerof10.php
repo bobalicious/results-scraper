@@ -89,7 +89,7 @@ function readRaces( $debug ) {
 	$races = array();
 	$text  = getRemoteData( RACES_BASE_URL );
 
-	$rowExpr = '/<tr.*>([\S\s]*)<\/tr>/gmUx';
+	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );
 	$rows = $matches[0];
 

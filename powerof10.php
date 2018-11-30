@@ -107,7 +107,7 @@ function readRaces( $debug ) {
 		// 4 - Results status, including link - e.g. <a href="/results/results.aspx?meetingid=267513">Complete</a>
 		// 5 - Submit results link, with image - e.g. <a href="/submit/submitmeeting.aspx?meetingid=267513" title="submit results"><img src="/images/pot/email.gif" border="0" /></a>
 
-		$cellExpr= '/<td.*?>([\S\s]*?)<\/td>/gmUx';
+		$cellExpr= '~<td.*?>([\S\s]*?)<\/td>~m';
 		preg_match_all( $cellExpr, $row, $matches );
 
 		$cells = $matches[1];
@@ -118,7 +118,8 @@ function readRaces( $debug ) {
 			}
 			continue;
 		}
-
+		echo( '<br/>' );
+		var_dump( $cells );
 	}
 
 }

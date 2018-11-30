@@ -16,5 +16,7 @@ echo( 'done' );
 
 	var_dump( readRaces( $debug ) );
 
+	echo( json_encode( readRaces( $debug ) ) );
+
 ?>
 </pre>

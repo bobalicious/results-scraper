@@ -133,7 +133,7 @@ function readRaces( $debug ) {
 		$thisRace['RawDate']       = $cells[0];
 		$thisRace['MeetingName']   = getTextFromLink( trim( $cells[1] ) );
 		$thisRace['VenueName']     = getTextFromLink( $rawVenueName );
-		$thisRace['MeetingId']     = $rawVenueName; // TODO: pull out the meeting Id
+		$thisRace['MeetingId']     = getMeetingIdFromLink( $rawVenueName );
 		$thisRace['MeetingType']   = $cells[3];
 		$thisRace['ResultsStatus'] = getTextFromLink( $cells[4] );
 		$thisRace['RaceFullName']  = $thisRace['MeetingName'] . ' (' . $thisRace['VenueName'] . ') - ' . $thisRace['MeetingType'];  
@@ -159,6 +159,20 @@ function getTextFromLink( $linkText ) {
 	
 	return trim( substr( $linkText, 0, strpos( $linkText, '<a href' ) ) );
 }
+
+function getMeetingIdFromLink( $linkText ) {
+
+	$regEx = '~meetingid=([^"]*)~';
+
+    preg_match( $regEx, $linkText, $matches );
+
+	if ( isset( $matches[1] ) ) {
+	    return $matches[1];
+	}
+
+    return '';
+}
+
 
 /*
 

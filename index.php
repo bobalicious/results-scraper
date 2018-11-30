@@ -16,19 +16,22 @@ echo( 'done' );
 
 	$return = [ 'error' => 'A valid mode was not specified' ];
 
-	if ( $GET['mode'] == 'races' ) {
-		$return = readRaces( 0 ) );
-	}
+	if ( isset( $_GET['mode'] ) ) {
 
-	if ( $GET['mode'] == 'athletes' ) {
-		$return = readAthletes( 0 );
-	}
+		if ( $_GET['mode'] == 'races' ) {
+			$return = readRaces( 0 );
+		}
 
-	if ( $GET['mode'] == 'athleteResults' ) {
-		$athleteId = $GET['id'];
-		$return = readAthleteResults( 0, $athleteId );
-	}
+		if ( $_GET['mode'] == 'athletes' ) {
+			$return = readAthletes( 0 );
+		}
 
+		if ( $_GET['mode'] == 'athleteResults' ) {
+			$athleteId = $GET['id'];
+			$return = readAthleteResults( 0, $athleteId );
+		}
+	}
+	
 	echo( json_encode( $return ) );
 
 ?>

@@ -136,7 +136,7 @@ function readRaces( $debug ) {
 		$thisRace['MeetingId']     = $rawVenueName; // TODO: pull out the meeting Id
 		$thisRace['MeetingType']   = $cells[3];
 		$thisRace['ResultsStatus'] = getTextFromLink( $cells[4] );
-		$thisRace['RaceFullName']  = $thisRace['MeetingName'] + ' (' + $thisRace['VenueName'] + ') - ' + $thisRace['MeetingType'];  
+		$thisRace['RaceFullName']  = $thisRace['MeetingName'] . ' (' . $thisRace['VenueName'] . ') - ' . $thisRace['MeetingType'];  
 
 		$races[] = $thisRace;
 
@@ -145,7 +145,6 @@ function readRaces( $debug ) {
 	return $races;
 
 }
-
 
 // will also return if the text is outside the link (happens in some meeting names)
 function getTextFromLink( $linkText ) {
@@ -158,7 +157,7 @@ function getTextFromLink( $linkText ) {
 	    return $matches[1];
 	}
 	
-	return substr( $linkText, 0, strpos( $linkText, '<a href' ) );
+	return trim( substr( $linkText, 0, strpos( $linkText, '<a href' ) ) );
 }
 
 /*

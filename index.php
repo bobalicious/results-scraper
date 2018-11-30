@@ -14,9 +14,22 @@ echo( 'about to read athlete results' );
 echo( 'done' );
 */
 
-	var_dump( readRaces( $debug ) );
+	$return = [ 'error' => 'A valid mode was not specified' ];
 
-	echo( json_encode( readRaces( $debug ) ) );
+	if ( $GET['mode'] == 'races' ) {
+		$return = readRaces( 0 ) );
+	}
+
+	if ( $GET['mode'] == 'athletes' ) {
+		$return = readAthletes( 0 );
+	}
+
+	if ( $GET['mode'] == 'athleteResults' ) {
+		$athleteId = $GET['id'];
+		$return = readAthleteResults( 0, $athleteId );
+	}
+
+	echo( json_encode( $return ) );
 
 ?>
 </pre>

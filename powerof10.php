@@ -101,8 +101,8 @@ function readRaces( $debug ) {
 
 		// Expected cells
 		// 0 - Date - E.g. Sun 25 Nov 2018
-		// 1 - Race Name, including link - e.g. <a href="https://xipgroc.cat/ca/curses/JeanBouin2018/10k/resultats" target="_blank">
-		// 2 - Meeting name, including link - e.g. <a href="/fixtures/meeting.aspx?meetingid=267513">Barcelona, ESP</a>
+		// 1 - Meeting Name, including link - e.g. <a href="https://xipgroc.cat/ca/curses/JeanBouin2018/10k/resultats" target="_blank">
+		// 2 - Venue name, including link - e.g. <a href="/fixtures/meeting.aspx?meetingid=267513">Barcelona, ESP</a>
 		// 3 - Meeting type - e.g. Road
 		// 4 - Results status, including link - e.g. <a href="/results/results.aspx?meetingid=267513">Complete</a>
 		// 5 - Submit results link, with image - e.g. <a href="/submit/submitmeeting.aspx?meetingid=267513" title="submit results"><img src="/images/pot/email.gif" border="0" /></a>
@@ -118,9 +118,34 @@ function readRaces( $debug ) {
 			}
 			continue;
 		}
-		echo( '<br/>' );
-		var_dump( $cells );
+
+		if ( $cells[0] == 'Date' ) {
+			if ( $debug > 1 ) {
+				echo( "Skipping row, not a race record. The first cell contains the header for the column<br/>" );
+			}
+			continue;
+
+		}
+
+		$thisRace = array();
+		$thisRace['RawDate'] = $cells[0];
+
+		$rawMeetingName = trim( $cells[1] );
+		$thisRace['MeetingName'] = substr( $rawMeetingName, 0, strpos( $rawMeetingName, '<a href' ) - 1 );
+
+		$rawVenueName = $cells[2];
+		$thisRace['VenueName'] = $rawVenueName; // TODO: pull out the venue name
+		$thisRace['MeetingId'] = $rawVenueName; // TODO: pull out the meeting Id
+
+		$thisRace['MeetingType'] = $cells[3];
+
+		$thisRace['ResultsStatus'] = $cells[4]; // TODO: pull out the results status
+
+		$races[] = $thisRace;
+
 	}
+
+	return $races;
 
 }
 

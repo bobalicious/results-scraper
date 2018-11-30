@@ -33,7 +33,7 @@ function readAthletes( $debug ) {
 
 		if( count( $cells ) != 9) {
 			if ( $debug > 1 ) {
-				echo( "Skipping row, not an athlete record. Should contain 10 cells. Actually contains " . count( $cells ) . "<br/>" );
+				echo( "Skipping row, not an athlete record. Should contain 9 cells. Actually contains " . count( $cells ) . "<br/>" );
 			}
 			continue;
 		}
@@ -84,13 +84,42 @@ function readAthletes( $debug ) {
 	return $athletes;
 }
 
-function readRaces() {
+function readRaces( $debug ) {
 
-	$text = getRemoteData( RACES_BASE_URL );
+	$races = array();
+	$text  = getRemoteData( RACES_BASE_URL );
 
+	$rowExpr = '/<tr.*>([\S\s]*)<\/tr>/gmUx';
+	preg_match_all( $rowExpr, $text, $matches );
+	$rows = $matches[0];
 
+	if ( $debug > 1 ) {
+		echo( 'Found ' . count($rows) . ' race records<br/>' );
+	}
 
+	foreach ( $rows as $row ) {
 
+		// Expected cells
+		// 0 - Date - E.g. Sun 25 Nov 2018
+		// 1 - Race Name, including link - e.g. <a href="https://xipgroc.cat/ca/curses/JeanBouin2018/10k/resultats" target="_blank">
+		// 2 - Meeting name, including link - e.g. <a href="/fixtures/meeting.aspx?meetingid=267513">Barcelona, ESP</a>
+		// 3 - Meeting type - e.g. Road
+		// 4 - Results status, including link - e.g. <a href="/results/results.aspx?meetingid=267513">Complete</a>
+		// 5 - Submit results link, with image - e.g. <a href="/submit/submitmeeting.aspx?meetingid=267513" title="submit results"><img src="/images/pot/email.gif" border="0" /></a>
+
+		$cellExpr= '/<td.*?>([\S\s]*?)<\/td>/gmUx';
+		preg_match_all( $cellExpr, $row, $matches );
+
+		$cells = $matches[1];
+
+		if( count( $cells ) != 6 ) {
+			if ( $debug > 1 ) {
+				echo( "Skipping row, not a race record. Should contain 6 cells. Actually contains " . count( $cells ) . "<br/>" );
+			}
+			continue;
+		}
+
+	}
 
 }
 

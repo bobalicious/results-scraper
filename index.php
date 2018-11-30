@@ -14,11 +14,9 @@ echo( 'about to read athlete results' );
 echo( 'done' );
 */
 
-	$return = array();
-
-/*
 	$return = [ 'error' => 'A valid mode was not specified' ];
 
+/*
 	if ( isset( $_GET['mode'] ) ) {
 
 		if ( $_GET['mode'] == 'races' ) {

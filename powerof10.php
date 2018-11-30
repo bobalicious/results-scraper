@@ -127,18 +127,16 @@ function readRaces( $debug ) {
 
 		}
 
-		$thisRace = array();
-		$thisRace['RawDate'] = $cells[0];
-
-		$thisRace['MeetingName'] = getTextFromLink( trim( $cells[1] ) );
-
 		$rawVenueName = $cells[2];
-		$thisRace['VenueName'] = getTextFromLink( $rawVenueName );
-		$thisRace['MeetingId'] = $rawVenueName; // TODO: pull out the meeting Id
 
-		$thisRace['MeetingType'] = $cells[3];
-
+		$thisRace = array();
+		$thisRace['RawDate']       = $cells[0];
+		$thisRace['MeetingName']   = getTextFromLink( trim( $cells[1] ) );
+		$thisRace['VenueName']     = getTextFromLink( $rawVenueName );
+		$thisRace['MeetingId']     = $rawVenueName; // TODO: pull out the meeting Id
+		$thisRace['MeetingType']   = $cells[3];
 		$thisRace['ResultsStatus'] = getTextFromLink( $cells[4] );
+		$thisRace['RaceFullName']  = $thisRace['MeetingName'] + ' (' + $thisRace['VenueName'] + ') - ' + $thisRace['MeetingType'];  
 
 		$races[] = $thisRace;
 
@@ -152,17 +150,15 @@ function readRaces( $debug ) {
 // will also return if the text is outside the link (happens in some meeting names)
 function getTextFromLink( $linkText ) {
 
-    $regEx = '~<a.*>(.*)</a>~';
+    $regEx = '~^<a.*>(.*)</a>~';
 
     preg_match( $regEx, $linkText, $matches );
 
-    var_dump( $matches );
-	
 	if ( isset( $matches[1] ) ) {
 	    return $matches[1];
 	}
 	
-	return substr( $linkText, 0, strpos( $linkText, '<a href' ) - 1 );
+	return substr( $linkText, 0, strpos( $linkText, '<a href' ) );
 }
 
 /*

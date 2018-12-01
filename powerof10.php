@@ -195,7 +195,7 @@ function readResults( $debug, $meetingId ) {
 			continue;
 		}
 
-		if ( $cells[0] == 'Pos' ) {
+		if ( $cells[0] == '<b>Pos</b>' ) {
 			if ( $debug > 1 ) {
 				echo( "Skipping row, not a result record. The first cell contains the header for the column<br/>" );
 			}
@@ -215,13 +215,13 @@ function readResults( $debug, $meetingId ) {
 		// 9 - Club
 
 		$thisResult = array();
-		$thisResult['Position'] = $cells[0];
-		$thisResult['Mw']       = $cells[1];
-		$thisResult['Ac']       = $cells[2];
-		$thisResult['Time']     = $cells[3];
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = getCell( $cells[1] );
+		$thisResult['Ac']       = getCell( $cells[2] );
+		$thisResult['Time']     = getCell( $cells[3] );
 		$thisResult['Name']     = getTextFromLink( $cells[4] );
-		$thisResult['Group']    = $cells[5];
-		$thisResult['Club']     = $cells[9];
+		$thisResult['Group']    = getCell( $cells[5] );
+		$thisResult['Club']     = getCell( $cells[9] );
 
 		$results[] = $thisResult;
 
@@ -232,6 +232,18 @@ function readResults( $debug, $meetingId ) {
 
 	$results[] = $raceResult;
 	return $results;
+}
+
+
+function getCell( $cellText ) {
+
+	$cellText = trim( $cellText );
+
+	if ( $cellText == '&nbsp;' ) {
+		return '';
+	}
+	return $cellText;
+
 }
 
 // will also return if the text is outside the link (happens in some meeting names)
@@ -245,7 +257,13 @@ function getTextFromLink( $linkText ) {
 	    return $matches[1];
 	}
 	
-	return trim( substr( $linkText, 0, strpos( $linkText, '<a href' ) ) );
+	$linkStart = strpos( $linkText, '<a href' );
+
+	if ( $linkStart ) {
+		return trim( substr( $linkText, 0, $linkStart ) );
+	}
+
+	return trim( $linkText );
 }
 
 function getMeetingIdFromLink( $linkText ) {

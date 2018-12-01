@@ -156,7 +156,7 @@ function readResults( $debug, $meetingId ) {
 	$text  = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000' );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
-	preg_match_all( $rowExpr, $table, $matches );
+	preg_match_all( $rowExpr, $text, $matches );
 	$rows = $matches[0];
 
 	if ( $debug > 1 ) {

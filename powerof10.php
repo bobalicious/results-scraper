@@ -153,7 +153,7 @@ function readRaces( $debug ) {
 function readResults( $debug, $meetingId ) { 
 
 	$results = array();
-	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000';
+	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&top=5000';
 
 	if ( $debug > 1 ) {
 		echo( "Loading URL: " . $url . "<br/>" );

@@ -2,7 +2,7 @@
 	error_reporting(E_ALL);
 	
 	set_time_limit ( 60*60 ); // 1 hour 
-	$debug = 0;
+	$debug = 2;
 
 	require_once( 'powerof10.php' );
 	require_once( 'keyfunctions.php' );
@@ -18,21 +18,21 @@ echo( 'done' );
 	if ( isset( $_GET['mode'] ) ) {
 
 		if ( $_GET['mode'] == 'races' ) {
-			$return = readRaces( 0 );
+			$return = readRaces( $debug );
 		}
 
 		if ( $_GET['mode'] == 'athletes' ) {
-			$return = readAthletes( 0 );
+			$return = readAthletes( $debug );
 		}
 
 		if ( $_GET['mode'] == 'athleteResults' ) {
 			$athleteId = $_GET['id'];
-			$return = readAthleteResults( 0, $athleteId );
+			$return = readAthleteResults( $debug, $athleteId );
 		}
 
 		if ( $_GET['mode'] == 'raceResults' ) {
 			$meetingId = $_GET['id'];
-			$return = readResults( 0, $meetingId );
+			$return = readResults( $debug, $meetingId );
 		}
 
 	}

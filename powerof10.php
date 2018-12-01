@@ -159,7 +159,7 @@ function readResults( $debug, $meetingId ) {
 		echo( "Loading URL: " . $url . "<br/>" );
 	}
 
-	$text    = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&top=5000', [ 'meetingid' => $meetingId ] );
+	$text    = getRemoteData( RESULTS_BASE_URL, [ 'meetingid' => $meetingId ] );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );
@@ -183,7 +183,7 @@ function readResults( $debug, $meetingId ) {
 		if ( count( $cells ) == 1 && ! $startedGatheringResults ) {
 			$raceName = $cells[0];
 			if ( $debug > 1 ) {
-				echo( "Found a race name cell: " . $raceName . "<br/>" );
+				echo( "Found a race name cell.<br/>" );
 			}
 			continue;
 		}

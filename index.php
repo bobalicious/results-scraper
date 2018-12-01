@@ -1,4 +1,3 @@
-<pre>
 <?php
 	error_reporting(E_ALL);
 	
@@ -31,9 +30,17 @@ echo( 'done' );
 			$return = readAthleteResults( 0, $athleteId );
 		}
 
+		if ( $_GET['mode'] == 'raceResults' ) {
+			$meetingId = $_GET['id'];
+			$return = readResults( 0, $meetingId );
+		}
+
 	}
 
-	echo( json_encode( $return ) );
-
-?>
-</pre>
+	if ( isset( $_GET['format'] ) && $_GET['format'] == 'raw' ) {
+		echo( "<pre>\r\n" );
+		var_dump( $return );
+		echo( '</pre>' );
+	} else {
+		echo( json_encode( $return ) );
+	}

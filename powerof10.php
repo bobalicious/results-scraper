@@ -9,6 +9,10 @@
 define( 'RACES_BASE_URL'   , 'http://www.thepowerof10.info/results/resultslookup.aspx' );
 define( 'ATHLETES_BASE_URL', 'http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers' );
 
+
+define( 'RESULTS_BASE_URL'             , 'https://www.thepowerof10.info/results/results.aspx' );	   // meetingid
+define( 'RESULTS_BASE_URL_RUN_BRITAIN' , 'https://www.runbritainrankings.com/results/results.aspx' );  // meetingid
+
 /**
  *   Read the data for each athlete from the power of 10. Returns an array of athlete objects.
  */
@@ -143,6 +147,82 @@ function readRaces( $debug ) {
 
 	return $races;
 
+}
+
+// TODO: needs to load multiple pages
+function readResults( $debug, $meetingId ) { 
+
+	$results = array();
+	$text  = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000' );
+
+	$rowExpr = '~<table.*>([\S\s]*)</table>~mU';
+	preg_match_all( $rowExpr, $text, $matches );
+	$rows = $matches[0];
+
+	if ( $debug > 1 ) {
+		echo( 'Found ' . count($rows) . ' result records<br/>' );
+	}
+
+	$startedGatheringResults = false;
+
+	foreach ( $rows as $row ) {
+
+		// TODO: needs to deal with different events
+
+		$cellExpr= '~<td.*?>([\S\s]*?)<\/td>~m';
+		preg_match_all( $cellExpr, $row, $matches );
+
+		$cells = $matches[1];
+
+		if ( count( $cells ) == 1 && ! $startedGatheringResults ) {
+			$raceName = $cells[0];
+			continue;
+		}
+
+		if ( count( $cells ) != 11 ) {
+			if ( $debug > 1 ) {
+				echo( "Skipping row, not a result record. Should contain 11 cells. Actually contains " . count( $cells ) . "<br/>" );
+			}
+			continue;
+		}
+
+		if ( $cells[0] == 'Pos' ) {
+			if ( $debug > 1 ) {
+				echo( "Skipping row, not a result record. The first cell contains the header for the column<br/>" );
+			}
+			continue;
+		}
+
+		// Expected cells
+		// 0 - Position
+		// 1 - MW ?
+		// 2 - AC ?
+		// 3 - Perf (time)
+		// 4 - Name - sometimes has a link
+		// 5 - AG (group)
+		// 6 - Gender
+		// 7 - Year
+		// 8 - Coach
+		// 9 - Club
+
+		$thisResult = array();
+		$thisResult['Position'] = $cells[0];
+		$thisResult['Mw']       = $cells[1];
+		$thisResult['Ac']       = $cells[2];
+		$thisResult['Time']     = $cells[3];
+		$thisResult['Name']     = getTextFromLink( $cells[4] );
+		$thisResult['Group']    = $cells[5];
+		$thisResult['Club']     = $cells[9];
+
+		$results[] = $thisResult;
+
+	}
+
+	$raceResult['Name']    = $raceName;
+	$raceResult['Results'] = $results;
+
+	$results[] = $raceResult;
+	return $results;
 }
 
 // will also return if the text is outside the link (happens in some meeting names)

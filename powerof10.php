@@ -159,7 +159,7 @@ function readResults( $debug, $meetingId ) {
 		echo( "Loading URL: " . $url . "<br/>" );
 	}
 
-	$text    = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000' );
+	$text    = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&top=5000', array[ 'meetingid' => $meetingId ] );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );

@@ -153,7 +153,13 @@ function readRaces( $debug ) {
 function readResults( $debug, $meetingId ) { 
 
 	$results = array();
-	$text  = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000' );
+	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000';
+
+	if ( $debug > 1 ) {
+		echo( "Loading URL: " . $url . "<br/>" );
+	}
+
+	$text    = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingid . '&top=5000' );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );

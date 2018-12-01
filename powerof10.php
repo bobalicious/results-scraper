@@ -176,6 +176,9 @@ function readResults( $debug, $meetingId ) {
 
 		if ( count( $cells ) == 1 && ! $startedGatheringResults ) {
 			$raceName = $cells[0];
+			if ( $debug > 1 ) {
+				echo( "Found a race name cell: " . $raceName . "<br/>" );
+			}
 			continue;
 		}
 

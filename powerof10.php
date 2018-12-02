@@ -150,10 +150,27 @@ function readRaces( $debug ) {
 }
 
 // TODO: needs to load multiple pages
-function readResults( $debug, $meetingId ) { 
+function readResults( $debug, $meetingId ) {
+
+	$results    = array();
+	$pageNumber = 1;
+	$getResults = true;
+
+	while( $getResults ) {
+
+		$newResults = readResults( $debug, $meetingId, 1 );
+
+		$results    = $newResults;
+		$getResults = false;
+	}
+
+	return $results;
+}
+
+function readResults( $debug, $meetingId, $pageNumber ) { 
 
 	$results = array();
-	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&top=5000';
+	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&pagenum=' . $pageNumber;
 
 	if ( $debug > 1 ) {
 		echo( "Loading URL: " . $url . "<br/>" );
@@ -169,8 +186,6 @@ function readResults( $debug, $meetingId ) {
 		echo( 'Found ' . count($rows) . ' result records<br/>' );
 	}
 
-	$startedGatheringResults = false;
-
 	foreach ( $rows as $row ) {
 
 		// TODO: needs to deal with different events
@@ -180,11 +195,18 @@ function readResults( $debug, $meetingId ) {
 
 		$cells = $matches[1];
 
-		if ( count( $cells ) == 1 && ! $startedGatheringResults ) {
+		if ( count( $cells ) == 1 && strpos( $raceName, '<b>' ) !== null ) {
 			$raceName = $cells[0];
 			if ( $debug > 1 ) {
 				echo( "Found a race name cell.<br/>" );
 			}
+
+			if ( isset( $thisRace['Name'] ) ) {
+				$results[] = $thisRace;
+			}
+
+			$thisRace['Name']    = $raceName;
+			$thisRace['Results'] = array();
 			continue;
 		}
 
@@ -223,14 +245,11 @@ function readResults( $debug, $meetingId ) {
 		$thisResult['Group']    = getCell( $cells[5] );
 		$thisResult['Club']     = getCell( $cells[9] );
 
-		$results[] = $thisResult;
+		$thisRace['Results'] = $thisResult;
 
 	}
 
-	$raceResult['Name']    = $raceName;
-	$raceResult['Results'] = $results;
-
-	$results[] = $raceResult;
+	$results[] = $thisRace;
 	return $results;
 }
 

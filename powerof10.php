@@ -152,10 +152,6 @@ function readRaces( $debug ) {
 // TODO: needs to load multiple pages
 function readResults( $debug, $meetingId ) {
 
-	if ( $pageNumber > 10 ) {
-		return array();
-	}
-
 	$results    = array();
 	$pageNumber = 1;
 	$getResults = true;
@@ -171,6 +167,11 @@ function readResults( $debug, $meetingId ) {
 		} else {
 			$getResults = false;
 		}
+
+		if ( $pageNumber > 10 ) {
+			$getResults = false;
+		}
+
 	}
 
 	return $results;

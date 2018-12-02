@@ -195,13 +195,13 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 
 		$cells = $matches[1];
 
-		if ( count( $cells ) == 1 && strpos( $raceName, '<b>' ) !== null ) {
+		if ( count( $cells ) == 1 && strpos( $raceName, '<b>' ) !== false ) {
 			$raceName = $cells[0];
 			if ( $debug > 1 ) {
 				echo( "Found a race name cell.<br/>" );
 			}
 
-			if ( isset( $thisRace['Name'] ) ) {
+			if ( isset( $thisRace['Name'] && count( $thisRace['Results'] ) > 0 ) ) {
 				$results[] = $thisRace;
 			}
 
@@ -245,7 +245,7 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 		$thisResult['Group']    = getCell( $cells[5] );
 		$thisResult['Club']     = getCell( $cells[9] );
 
-		$thisRace['Results'] = $thisResult;
+		$thisRace['Results'][] = $thisResult;
 
 	}
 

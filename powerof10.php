@@ -158,10 +158,15 @@ function readResults( $debug, $meetingId ) {
 
 	while( $getResults ) {
 
-		$newResults = readResultsPage( $debug, $meetingId, 1 );
+		$newResults = readResultsPage( $debug, $meetingId, $pageNumber );
 
-		$results    = $newResults;
-		$getResults = false;
+		if ( count( $newResults ) > 0 ) {
+			// merge the results
+			$results = $newResults;
+			$pageNumber++;
+		} else {
+			$getResults = false;
+		}
 	}
 
 	return $results;

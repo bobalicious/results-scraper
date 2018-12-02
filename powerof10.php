@@ -195,7 +195,7 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 
 		$cells = $matches[1];
 
-		if ( count( $cells ) == 1 && strpos( $raceName, '<b>' ) !== false ) {
+		if ( count( $cells ) == 1 && strpos( $raceName, '</b>' ) > 0 ) {
 			$raceName = $cells[0];
 			if ( $debug > 1 ) {
 				echo( "Found a race name cell.<br/>" );

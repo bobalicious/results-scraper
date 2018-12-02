@@ -152,6 +152,10 @@ function readRaces( $debug ) {
 // TODO: needs to load multiple pages
 function readResults( $debug, $meetingId ) {
 
+	if ( $pageNumber > 10 ) {
+		return array();
+	}
+
 	$results    = array();
 	$pageNumber = 1;
 	$getResults = true;
@@ -181,7 +185,7 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 		echo( "Loading URL: " . $url . "<br/>" );
 	}
 
-	$text    = getRemoteData( $url, [ 'meetingid' => $meetingId ] );
+	$text    = getRemoteData( $url );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );

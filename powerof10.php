@@ -168,7 +168,7 @@ function readResults( $debug, $meetingId ) {
 			$getResults = false;
 		}
 
-		if ( $pageNumber > 10 ) {
+		if ( $pageNumber > 5 ) {
 			$getResults = false;
 		}
 

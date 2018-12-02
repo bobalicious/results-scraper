@@ -201,7 +201,7 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 				echo( "Found a race name cell.<br/>" );
 			}
 
-			if ( isset( $thisRace['Name'] && count( $thisRace['Results'] ) > 0 ) ) {
+			if ( isset( $thisRace['Name'] ) && count( $thisRace['Results'] ) > 0 ) {
 				$results[] = $thisRace;
 			}
 

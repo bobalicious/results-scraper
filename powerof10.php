@@ -168,7 +168,7 @@ function readResults( $debug, $meetingId ) {
 }
 
 function readResultsPage( $debug, $meetingId, $pageNumber ) { 
-/*
+
 	$results = array();
 	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&pagenum=' . $pageNumber;
 
@@ -251,7 +251,6 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 
 	$results[] = $thisRace;
 	return $results;
-	*/
 }
 
 

@@ -158,7 +158,7 @@ function readResults( $debug, $meetingId ) {
 
 	while( $getResults ) {
 
-		$newResults = readResults( $debug, $meetingId, 1 );
+		$newResults = readResultsPage( $debug, $meetingId, 1 );
 
 		$results    = $newResults;
 		$getResults = false;
@@ -167,7 +167,7 @@ function readResults( $debug, $meetingId ) {
 	return $results;
 }
 
-function readResults( $debug, $meetingId, $pageNumber ) { 
+function readResultsPage( $debug, $meetingId, $pageNumber ) { 
 /*
 	$results = array();
 	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&pagenum=' . $pageNumber;

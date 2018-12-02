@@ -259,7 +259,9 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 
 	}
 
-	$results[] = $thisRace;
+	if ( isset( $thisRace['Name'] ) && count( $thisRace['Results'] ) > 0 ) {
+		$results[] = $thisRace;
+	}
 	return $results;
 }
 

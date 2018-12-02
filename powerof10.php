@@ -206,7 +206,9 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 		$cells = $matches[1];
 
 		if ( count( $cells ) == 1 && strpos( $cells[0], '<b>' ) !== false ) {
+
 			$raceName = geRaceNameFromText( $cells[0] );
+			echo( $sRaceName );
 			if ( $debug > 1 ) {
 				echo( "Found a race name cell.<br/>" );
 			}

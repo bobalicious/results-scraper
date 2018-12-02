@@ -158,7 +158,7 @@ function readResults( $debug, $meetingId ) {
 
 	while( $getResults ) {
 
-		$newResults = readResults( $debug, $meetingId, 1 );
+//		$newResults = readResults( $debug, $meetingId, 1 );
 
 		$results    = $newResults;
 		$getResults = false;
@@ -176,7 +176,7 @@ function readResults( $debug, $meetingId, $pageNumber ) {
 		echo( "Loading URL: " . $url . "<br/>" );
 	}
 
-	$text    = getRemoteData( RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&top=5000', [ 'meetingid' => $meetingId ] );
+	$text    = getRemoteData( $url, [ 'meetingid' => $meetingId ] );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );

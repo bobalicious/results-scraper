@@ -207,8 +207,8 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 
 		if ( count( $cells ) == 1 && strpos( $cells[0], '<b>' ) !== false ) {
 
-			$raceName = geRaceNameFromText( $cells[0] );
-			echo( $sRaceName );
+			$raceName = getRaceNameFromText( $cells[0] );
+
 			if ( $debug > 1 ) {
 				echo( "Found a race name cell.<br/>" );
 			}
@@ -312,7 +312,7 @@ function getMeetingIdFromLink( $linkText ) {
     return '';
 }
 
-function geRaceNameFromText( $raceNameText ) {
+function getRaceNameFromText( $raceNameText ) {
 
 	$regEx = '~<b>(.*)</b>~';
 

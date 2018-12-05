@@ -1,0 +1,18 @@
+h5, h6 {
+	padding: 0px;
+	margin:0px;
+}
+
+.font_5 {
+	font: normal normal normal 28px/1.4em lulo-clean-w01-one-bold,sans-serif;
+	font-size: 28px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.font_6 {
+	font-family: avenir-lt-w01_35-light1475496, sans-serif;
+	font-size: 22px;
+	font-weight: 400;
+	padding: 0px;
+}

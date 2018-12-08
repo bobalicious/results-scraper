@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RESULTS } from '../mock-results';
 
 @Component({
@@ -7,14 +7,10 @@ import { RESULTS } from '../mock-results';
   styleUrls: ['./results-renderer.component.css'],
 
 })
-export class ResultsRendererComponent implements OnInit {
+export class ResultsRendererComponent {
 
-  results = RESULTS;
+  @Input()
+  races: Race[];
 
   constructor() { }
-
-  ngOnInit() {
-  	console.log( 'init' );
-  }
-
 }

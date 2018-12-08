@@ -10,4 +10,7 @@ export class Race {
 	RaceFullName : string;
 	RaceSubName  : string;
 	Results      : Result[];
+
+	constructor() {
+	}
 }

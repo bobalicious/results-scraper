@@ -1,0 +1,8 @@
+<div *ngIf="races" style="color:#FFFFFF; font-size:20px;">
+
+	<ul>
+		<div *ngFor="let race of races">
+			<li (click)="handleClickedRace(race)">{{race.RawDate}}: {{race.MeetingName}}: {{race.MeetingType}} @ {{race.VenueName}}</li>
+		</div>
+	</ul>
+</div>

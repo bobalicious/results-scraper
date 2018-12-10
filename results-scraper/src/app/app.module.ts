@@ -6,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ResultsRendererComponent } from './results-renderer/results-renderer.component';
 import { ResultsService } from './results.service';
+import { RaceListRendererComponent } from './race-list-renderer/race-list-renderer.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ResultsRendererComponent,
+    RaceListRendererComponent,
   ],
   imports: [
     BrowserModule,

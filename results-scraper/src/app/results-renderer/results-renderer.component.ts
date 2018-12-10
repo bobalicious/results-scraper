@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { RESULTS } from '../mock-results';
 
 @Component({
   selector: 'app-results-renderer',

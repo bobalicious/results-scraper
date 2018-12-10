@@ -8,12 +8,17 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ResultsService {
 
-	resultsUrl = 'https://results-scraper.herokuapp.com/?mode=raceResults&id=261986';
+	resultsUrl = 'https://results-scraper.herokuapp.com/?mode=raceResults'; // &id=261986';
+	racesUrl   = 'https://results-scraper.herokuapp.com/?mode=races';
 
 	constructor( private http: HttpClient ) { }
 
-	getResults() : Observable<Result[]> {
-		return this.http.get( this.resultsUrl );
+	getRaces() : Observable<Race[]> {
+		return this.http.get( this.racesUrl );
+	}
+
+	getResults( meetingId : string ) : Observable<Result[]> {
+		return this.http.get( this.resultsUrl + '&id=' + meetingId );
 	}
 
 }

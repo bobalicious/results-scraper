@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Race } from './../race';
 
 @Component({
   selector: 'app-race-list-renderer',

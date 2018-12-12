@@ -236,26 +236,17 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 			continue;
 		}
 
-		// Expected cells
-		// 0 - Position
-		// 1 - MW ?
-		// 2 - AC ?
-		// 3 - Perf (time)
-		// 4 - Name - sometimes has a link
-		// 5 - AG (group)
-		// 6 - Gender
-		// 7 - Year
-		// 8 - Coach
-		// 9 - Club
-
 		$thisResult = array();
-		$thisResult['Position'] = getCell( $cells[0] );
-		$thisResult['Mw']       = getCell( $cells[1] );
-		$thisResult['Ac']       = getCell( $cells[2] );
-		$thisResult['Time']     = getCell( $cells[3] );
-		$thisResult['Name']     = getTextFromLink( $cells[4] );
-		$thisResult['Group']    = getCell( $cells[5] );
-		$thisResult['Club']     = getCell( $cells[9] );
+
+		if ( strpos( $cells[3], '.' ) !== false || strpos( $cells[3], ':' ) !== false ) {
+
+			$thisResult = getP10RaceResultFormat1( $cells );
+
+		} else if ( strpos( $cells[1], '.' ) !== false ) {
+
+			$thisResult = getP10RaceResultFormat2( $cells );
+
+		}
 
 		$thisRace['Results'][] = $thisResult;
 
@@ -267,6 +258,53 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 	return $results;
 }
 
+function getP10RaceResultFormat1( $cells ) {
+
+	// Format 1 - https://www.thepowerof10.info/results/results.aspx?meetingid=253252
+	// Expected cells
+	// 0 - Position
+	// 1 - MW ?
+	// 2 - AC ?
+	// 3 - Perf (time)
+	// 4 - Name - sometimes has a link
+	// 5 - AG (group)
+	// 6 - Gender
+	// 7 - Year
+	// 8 - Coach
+	// 9 - Club
+	$thisResult['Position'] = getCell( $cells[0] );
+	$thisResult['Mw']       = getCell( $cells[1] );
+	$thisResult['Ac']       = getCell( $cells[2] );
+	$thisResult['Time']     = getCell( $cells[3] );
+	$thisResult['Name']     = getTextFromLink( $cells[4] );
+	$thisResult['Group']    = getCell( $cells[5] );
+	$thisResult['Club']     = getCell( $cells[9] );
+	return $thisResult;
+}
+
+function getP10RaceResultFormat2( $cells ) {
+
+	// Format 2 - E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=268712
+	// 0 - Position
+	// 1 - Perf (time)
+	// 2 - Name - sometimes has a link
+	// 3 - Unknown (only seen blank)
+	// 4 - AG (group)
+	// 5 - Gender
+	// 6 - Coach
+	// 7 - Club
+	// 8 - SB
+	// 9 - PB
+	$thisResult['Position'] = getCell( $cells[0] );
+	$thisResult['Mw']       = '';
+	$thisResult['Ac']       = '';
+	$thisResult['Time']     = getCell( $cells[1] );
+	$thisResult['Name']     = getTextFromLink( $cells[2] );
+	$thisResult['Group']    = getCell( $cells[4] );
+	$thisResult['Club']     = getCell( $cells[7] );
+	return $thisResult;
+
+}
 
 function getCell( $cellText ) {
 
@@ -316,7 +354,7 @@ function getRaceNameFromText( $raceNameText ) {
 
 	$regEx = '~<b>(.*)</b>~';
 
-    preg_match( $regEx, $linkText, $matches );
+    preg_match( $regEx, $raceNameText, $matches );
 
 	if ( isset( $matches[1] ) ) {
 	    return $matches[1];

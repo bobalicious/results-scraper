@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Result } from './result';
 import { Race } from './race';
-import { HttpClient } from '@angular/common/http';
+import { SearchCriteria } from './search-criteria';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 
 @Injectable({
@@ -19,8 +20,16 @@ export class ResultsService {
 
 	constructor( private http: HttpClient ) { }
 
-	getRaces() : Observable<Race[]> {
-		return this.http.get<Race[]>( this.racesUrl );
+	getRaces( searchCriteria : SearchCriteria ) : Observable<Race[]> {
+
+	    let params = new HttpParams();
+
+	    params = ( searchCriteria.dateFrom ? params.set( 'datefrom', searchCriteria.dateFrom ) : params );
+	    params = ( searchCriteria.dateTo   ? params.set( 'dateto'  , searchCriteria.dateTo   ) : params );
+	    params = ( searchCriteria.venue    ? params.set( 'venue'   , searchCriteria.venue    ) : params );
+	    params = ( searchCriteria.meeting  ? params.set( 'meeting' , searchCriteria.meeting  ) : params );
+
+		return this.http.get<Race[]>( this.racesUrl, { params: params } );
 	}
 
 	getResults( meetingId : string ) : Observable<Result[]> {

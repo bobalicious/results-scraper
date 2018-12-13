@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Race } from './race';
-import { ResultsService} from './results.service';
+import { ResultsService } from './results.service';
+import { SearchCriteria } from './search-criteria';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +14,7 @@ export class AppComponent implements OnInit {
 	/*
 	Task list:
 
-		* Done - Mechanism for selecting a race
-		* Done - Once a race is selected, get the race from the current array, call for the results and render them
-
-		* Find out why recent results aren't being returned.
+		* Find more recent race results that do not show
 
 		Finding the right race:
 			* Pass filters into the race search API
@@ -41,10 +39,13 @@ export class AppComponent implements OnInit {
 	selectableRaces: Race[];
 	selectedRace   : Race;
 
+	searchCriteria : SearchCriteria;
+
 	constructor( private resultsService: ResultsService ) { }
 
 	ngOnInit() {
 		console.log( 'init' );
+		this.searchCriteria = new SearchCriteria();		
 		this.getRaces();
 	}
 
@@ -53,8 +54,12 @@ export class AppComponent implements OnInit {
 		this.getResults();
 	}
 
+	handleClickedSearch() {
+		this.getRaces();
+	}
+
 	getRaces() {
-		this.resultsService.getRaces()
+		this.resultsService.getRaces( this.searchCriteria )
 			.subscribe( races => this.selectableRaces = races );
 	}
 

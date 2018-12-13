@@ -81,7 +81,7 @@ function readAthletes( $debug ) {
 	return $athletes;
 }
 
-function readRaces( $debug, $startDate, $endDate, $eventSearch, $venueSearch ) {
+function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch ) {
 
 	$searchUrl = RACES_BASE_URL;
 	$searchParameters = array();
@@ -94,8 +94,8 @@ function readRaces( $debug, $startDate, $endDate, $eventSearch, $venueSearch ) {
 		$searchParameters[] = 'dateto=' . urlencode( $endDate );
 	}
 
-	if ( $eventSearch ) {
-		$searchParameters[] = 'title=*' . urlencode( $eventSearch ) . '*';
+	if ( $meetingSearch ) {
+		$searchParameters[] = 'title=*' . urlencode( $meetingSearch ) . '*';
 	}
 
 	if ( $venueSearch ) {

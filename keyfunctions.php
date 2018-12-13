@@ -137,11 +137,11 @@ function getRemoteData($url, $post_paramtrs = false) {
     curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
     if ($post_paramtrs) {
         curl_setopt($c, CURLOPT_POST, TRUE);
-        curl_setopt($c, CURLOPT_POSTFIELDS, "var1=bla&" . $post_paramtrs);
+        curl_setopt($c, CURLOPT_POSTFIELDS, $post_paramtrs);
     } curl_setopt($c, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($c, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; rv:33.0) Gecko/20100101 Firefox/33.0");
-    curl_setopt($c, CURLOPT_COOKIE, 'CookieName1=Value;');
+
     curl_setopt($c, CURLOPT_MAXREDIRS, 10);
     $follow_allowed = ( ini_get('open_basedir') || ini_get('safe_mode')) ? false : true;
     if ($follow_allowed) {

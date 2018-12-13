@@ -81,10 +81,34 @@ function readAthletes( $debug ) {
 	return $athletes;
 }
 
-function readRaces( $debug ) {
+function readRaces( $debug, $startDate, $endDate, $eventSearch, $venueSearch ) {
+
+	$searchUrl = RACES_BASE_URL;
+	$searchParameters = array();
+
+	if ( $startDate ) {
+		$searchParameters[] = 'datefrom=' . urlencode( $startDate );
+	}
+
+	if ( $endDate ) {
+		$searchParameters[] = 'dateto=' . urlencode( $endDate );
+	}
+
+	if ( $eventSearch ) {
+		$searchParameters[] = 'title=*' . urlencode( $eventSearch ) . '*';
+	}
+
+	if ( $venueSearch ) {
+		$searchParameters[] = 'venue=*' . urlencode( $venueSearch ) . '*';
+	}
+
+	if ( $searchParameters ) {
+		$searchUrl .= '?' . join( $searchParameters, '&' );
+	}
+
+	$text  = getRemoteData( $searchUrl );
 
 	$races = array();
-	$text  = getRemoteData( RACES_BASE_URL );
 
 	$rowExpr = '~<tr.*>([\S\s]*)</tr>~mU';
 	preg_match_all( $rowExpr, $text, $matches );
@@ -320,7 +344,6 @@ function getRaceNameFromText( $raceNameText ) {
 
     return $raceNameText;
 }
-
 
 function textContainsTime( $sText ) {
 	$regEx = '~[0-9][:.][0-9]~';

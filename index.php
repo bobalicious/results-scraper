@@ -14,7 +14,29 @@
 	if ( isset( $_GET['mode'] ) ) {
 
 		if ( $_GET['mode'] == 'races' ) {
-			$return = readRaces( $debug );
+
+			$startDate   = '';
+			$endDate     = '';
+			$eventSearch = '';
+			$venueSearch = '';
+
+			if ( isset( $_GET['startdate'] ) ) {
+				$startDate = $_GET['startdate'];
+			}
+
+			if ( isset( $_GET['enddate'] ) ) {
+				$endDate = $_GET['enddate'];
+			}
+
+			if ( isset( $_GET['event'] ) ) {
+				$eventSearch = $_GET['event'];
+			}
+
+			if ( isset( $_GET['venue'] ) ) {
+				$venueSearch = $_GET['venue'];
+			}
+
+			$return = readRaces( $debug, $startDate, $endDate, $eventSearch, $venueSearch );
 		}
 
 		if ( $_GET['mode'] == 'athletes' ) {

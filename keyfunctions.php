@@ -152,6 +152,7 @@ function getRemoteData($url, $post_paramtrs = false) {
     curl_setopt($c, CURLOPT_AUTOREFERER, true);
     curl_setopt($c, CURLOPT_ENCODING, 'gzip,deflate');
     $data = curl_exec($c);
+
     $status = curl_getinfo($c);
     curl_close($c);
     preg_match('/(http(|s)):\/\/(.*?)\/(.*\/|)/si', $status['url'], $link);

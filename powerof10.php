@@ -179,6 +179,10 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 					, new P10Format3()
 					, new P10Format4()
 					, new P10Format5()
+					, new P10Format6()
+					, new P10Format7()
+					, new RunBritainFormat()
+					, new RunBritainFormat2()
 					);
 
 	$results = array();
@@ -201,7 +205,7 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 	$format = null;
 	foreach ( $rows as $row ) {
 
-		// TODO: needs to deal with different events
+		// TODO: needs to deal with different events - does it?  It might already
 
 		$cellExpr= '~<td.*?>([\S\s]*?)<\/td>~m';
 		preg_match_all( $cellExpr, $row, $matches );
@@ -225,9 +229,9 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 			continue;
 		}
 
-		if ( $cells[0] === '<b>Pos</b>' ) {
+		if ( $cells[0] === '<b>Pos</b>' || ( isset( $cells[1] ) && $cells[1] === '<b>Pos</b>' ) ) {
 
-			// Is a header row, so new formatter required
+			// Is a header row, so a new formatter may be required
 			$format = null;
 
 			foreach ( $formats as $thisFormat ) {
@@ -274,7 +278,7 @@ function getCell( $cellText ) {
 // will also return if the text is outside the link (happens in some meeting names)
 function getTextFromLink( $linkText ) {
 
-    $regEx = '~^<a.*>(.*)</a>~';
+    $regEx = '~^<a.*>(.*)</a>~U';
 
     preg_match( $regEx, $linkText, $matches );
 
@@ -319,10 +323,7 @@ function getRaceNameFromText( $raceNameText ) {
 
 
 function textContainsTime( $sText ) {
-	echo( "Does $sText match?<br/>" );
 	$regEx = '~[0-9][:.][0-9]~';
-	echo( preg_match( $regEx, $sText ) );
-	echo( '<br/>');
 	return preg_match( $regEx, $sText );
 }
 
@@ -510,6 +511,155 @@ class P10Format5 {
 		$thisResult['Club']     = getCell( $cells[7] );
 		return $thisResult;
 	}
+}
+
+class P10Format6 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 12 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 12 ) {
+			return false;
+		}
+		return ( $cells[2] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=265226
+		// 0 - Position
+		// 1 - Perf (time)
+		// 2 - Name - sometimes has a link
+		// 3 - Unknown (only seen blank)
+		// 4 - AG (group)
+		// 5 - Gender
+		// 6 - Year
+		// 7 - Coach
+		// 8 - Club
+		// 9 - SB
+		// 10 - PB
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = '';
+		$thisResult['Ac']       = '';
+		$thisResult['Time']     = getCell( $cells[1] );
+		$thisResult['Name']     = getTextFromLink( $cells[2] );
+		$thisResult['Group']    = getCell( $cells[4] );
+		$thisResult['Club']     = getCell( $cells[8] );
+		return $thisResult;
+	}
+}
+
+class P10Format7 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 10 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 10 ) {
+			return false;
+		}
+		return ( $cells[4] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=253007
+		// 0 - Position
+		// 1 - MW
+		// 2 - AC
+		// 3 - Perf
+		// 4 - Name - sometimes has a link
+		// 5 - AG (group)
+		// 6 - Gender
+		// 7 - Coach
+		// 8 - Club
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = getCell( $cells[1] );
+		$thisResult['Ac']       = getCell( $cells[2] );
+		$thisResult['Time']     = getCell( $cells[3] );
+		$thisResult['Name']     = getTextFromLink( $cells[4] );
+		$thisResult['Group']    = getCell( $cells[5] );
+		$thisResult['Club']     = getCell( $cells[8] );
+		return $thisResult;
+	}
+}
+
+class RunBritainFormat {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 16 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 16 ) {			
+			return false;
+		}
+		
+		return ( $cells[6] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.runbritainrankings.com/results/results.aspx?meetingid=232067
+		// 0 - Checkbox
+		// 1 - Position
+		// 2 - Time
+		// 3 - Blank
+		// 4 - Blank
+		// 5 - Blank
+		// 6 - Name
+		// 7 - PB / SB
+		// 8 - Group
+		// 9 - Gender
+		// 10 - Club
+		$thisResult['Position'] = getCell( $cells[1] );
+		$thisResult['Mw']       = '';
+		$thisResult['Ac']       = '';
+		$thisResult['Time']     = getCell( $cells[2] );
+		$thisResult['Name']     = getTextFromLink( $cells[6] );
+		$thisResult['Group']    = getCell( $cells[8] );
+		$thisResult['Club']     = getCell( $cells[10] );
+		return $thisResult;
+	}
+}
+
+class RunBritainFormat2 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 17 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 17 ) {			
+			return false;
+		}
+		
+		return ( $cells[7] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. ???
+		// 0 - Checkbox
+		// 1 - Position
+		// 2 - Time (Gun)
+		// 3 - Time (Chip)
+		// 4 - Blank
+		// 5 - Blank
+		// 6 - Blank
+		// 7 - Name
+		// 8 - PB / SB
+		// 9 - Group
+		// 10 - Gender
+		// 11 - Club
+		$thisResult['Position'] = getCell( $cells[1] );
+		$thisResult['Mw']       = '';
+		$thisResult['Ac']       = '';
+		$thisResult['Time']     = getCell( $cells[3] );
+		$thisResult['Name']     = getTextFromLink( $cells[7] );
+		$thisResult['Group']    = getCell( $cells[9] );
+		$thisResult['Club']     = getCell( $cells[11] );
+		return $thisResult;
+	}	
 }
 
 ?>

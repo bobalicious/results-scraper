@@ -1,11 +1,5 @@
 <?php
 
-//ini_set('display_startup_errors',1);
-//ini_set('display_errors',1);
-//error_reporting(-1);
-//require_once('../lib/functions.php');
-//require 'navbar.php';
-
 define( 'RACES_BASE_URL'   , 'http://www.thepowerof10.info/results/resultslookup.aspx' );
 define( 'ATHLETES_BASE_URL', 'http://www.thepowerof10.info/athletes/athleteslookup.aspx?club=Queens+Park+Harriers' );
 
@@ -149,7 +143,7 @@ function readRaces( $debug ) {
 
 }
 
-// TODO: needs to load multiple pages
+// TODO: needs to load multiple pages - or does it?
 function readResults( $debug, $meetingId ) {
 
 	$results    = array();
@@ -161,9 +155,10 @@ function readResults( $debug, $meetingId ) {
 		$newResults = readResultsPage( $debug, $meetingId, $pageNumber );
 
 		if ( count( $newResults ) > 0 ) {
-			// merge the results
+			// TODO: merge the results
 			$results = $newResults;
 			$pageNumber++;
+			$getResults = false;
 		} else {
 			$getResults = false;
 		}
@@ -178,6 +173,13 @@ function readResults( $debug, $meetingId ) {
 }
 
 function readResultsPage( $debug, $meetingId, $pageNumber ) { 
+
+	$formats = array( new P10Format1()
+					, new P10Format2()
+					, new P10Format3()
+					, new P10Format4()
+					, new P10Format5()
+					);
 
 	$results = array();
 	$url     = RESULTS_BASE_URL . '?meetingid=' . $meetingId . '&pagenum=' . $pageNumber;
@@ -196,6 +198,7 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 		echo( 'Found ' . count($rows) . ' result records<br/>' );
 	}
 
+	$format = null;
 	foreach ( $rows as $row ) {
 
 		// TODO: needs to deal with different events
@@ -222,33 +225,31 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 			continue;
 		}
 
-		if ( count( $cells ) != 11 ) {
-			if ( $debug > 1 ) {
-				echo( "Skipping row, not a result record. Should contain 11 cells. Actually contains " . count( $cells ) . "<br/>" );
+		if ( $cells[0] === '<b>Pos</b>' ) {
+
+			// Is a header row, so new formatter required
+			$format = null;
+
+			foreach ( $formats as $thisFormat ) {
+				if ( $thisFormat->headerRowMatchesFormat( $cells ) ) {
+					$format = $thisFormat;
+				}
 			}
+
+			if ( $debug > 1 ) {
+				if ( $format ) {
+					echo( "Used header row to define format as:".get_class( $format )."<br/>" );
+				} else {
+					echo( "Could not find a format that matches the row<br/>" );
+				}
+			}
+
 			continue;
 		}
 
-		if ( $cells[0] == '<b>Pos</b>' ) {
-			if ( $debug > 1 ) {
-				echo( "Skipping row, not a result record. The first cell contains the header for the column<br/>" );
-			}
-			continue;
+		if ( $format && $format->isResultsRow( $cells ) ) {
+			$thisRace['Results'][] = $format->getResultsFromRow( $cells );
 		}
-
-		$thisResult = array();
-
-		if ( strpos( $cells[3], '.' ) !== false || strpos( $cells[3], ':' ) !== false ) {
-
-			$thisResult = getP10RaceResultFormat1( $cells );
-
-		} else if ( strpos( $cells[1], '.' ) !== false ) {
-
-			$thisResult = getP10RaceResultFormat2( $cells );
-
-		}
-
-		$thisRace['Results'][] = $thisResult;
 
 	}
 
@@ -258,53 +259,6 @@ function readResultsPage( $debug, $meetingId, $pageNumber ) {
 	return $results;
 }
 
-function getP10RaceResultFormat1( $cells ) {
-
-	// Format 1 - https://www.thepowerof10.info/results/results.aspx?meetingid=253252
-	// Expected cells
-	// 0 - Position
-	// 1 - MW ?
-	// 2 - AC ?
-	// 3 - Perf (time)
-	// 4 - Name - sometimes has a link
-	// 5 - AG (group)
-	// 6 - Gender
-	// 7 - Year
-	// 8 - Coach
-	// 9 - Club
-	$thisResult['Position'] = getCell( $cells[0] );
-	$thisResult['Mw']       = getCell( $cells[1] );
-	$thisResult['Ac']       = getCell( $cells[2] );
-	$thisResult['Time']     = getCell( $cells[3] );
-	$thisResult['Name']     = getTextFromLink( $cells[4] );
-	$thisResult['Group']    = getCell( $cells[5] );
-	$thisResult['Club']     = getCell( $cells[9] );
-	return $thisResult;
-}
-
-function getP10RaceResultFormat2( $cells ) {
-
-	// Format 2 - E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=268712
-	// 0 - Position
-	// 1 - Perf (time)
-	// 2 - Name - sometimes has a link
-	// 3 - Unknown (only seen blank)
-	// 4 - AG (group)
-	// 5 - Gender
-	// 6 - Coach
-	// 7 - Club
-	// 8 - SB
-	// 9 - PB
-	$thisResult['Position'] = getCell( $cells[0] );
-	$thisResult['Mw']       = '';
-	$thisResult['Ac']       = '';
-	$thisResult['Time']     = getCell( $cells[1] );
-	$thisResult['Name']     = getTextFromLink( $cells[2] );
-	$thisResult['Group']    = getCell( $cells[4] );
-	$thisResult['Club']     = getCell( $cells[7] );
-	return $thisResult;
-
-}
 
 function getCell( $cellText ) {
 
@@ -361,74 +315,201 @@ function getRaceNameFromText( $raceNameText ) {
 	}
 
     return $raceNameText;
-
 }
 
-/*
 
+function textContainsTime( $sText ) {
+	echo( "Does $sText match?<br/>" );
+	$regEx = '~[0-9][:.][0-9]~';
+	echo( preg_match( $regEx, $sText ) );
+	echo( '<br/>');
+	return preg_match( $regEx, $sText );
+}
 
-$conn = initDatabase();
+class P10Format1 {
 
-
-$findMemberStmt1 = $conn->prepare('SELECT id, powerOf10 FROM members WHERE powerOf10=? AND year>=?') or safeDie('Failed to prepare statement'.mysqli_error($conn));
-$findMemberStmt2 = $conn->prepare('SELECT id, name, DATE_FORMAT(dob,"%Y-%m-%d") AS "dob" , powerOf10 FROM members WHERE UPPER(name) LIKE ? AND year>=?') or safeDie('Failed to prepare statement'.mysqli_error($conn));
-$updateMemberStatement = $conn->prepare('UPDATE members SET powerOf10=?, gender=? WHERE id=? AND (powerOf10 IS NULL OR powerOf10="")') or safeDie('Failed to prepare statement'.mysqli_error($conn));				
-
-$count = 0;
-$athletes = readAthletes($debug);
-$year = SUBS_YEAR;
-foreach ($athletes as $athlete) {
-	
-	echo('Looking for athlete with id '.$athlete['id']."<br>\n");
-	// Make sure that we have stored the power of 10 id against the athlete's records
-	$findMemberStmt1->bind_param('ss',$athlete['id'],$year) or safeDie('Failed to bind parameter '. mysqli_error($conn));
-	$findMemberStmt1->execute() or safeDie('Failed to execute statement '.mysqli_error($conn));
-	$res = $findMemberStmt1->get_result();
-	$row = $res->fetch_assoc();
-	$res->close();
-	if (!$row) {
-		echo('Looking for athlete with like '.htmlentities($athlete['pattern']).'<br>');
-		$pattern = $athlete['pattern'];
-		$ym1 = $year-1;
-		$findMemberStmt2->bind_param('ss',$pattern,$ym1 )  or safeDie('Failed to bind parameter '. mysqli_error($conn));
-		$findMemberStmt2->execute() or safeDie('Failed to execute statement '.mysqli_error($conn));
-		$res = $findMemberStmt2->get_result();
-		$foundAthlete = false;
-		while ($row = $res->fetch_assoc()) {
-			if ($athlete['dob']=='0000-00-00' || $row['dob']=='0000-00-00' || $athlete['dob']==$row['dob']) {
-				echo ("Updating athlete ".htmlentities( $athlete['name']."<br>" ));
-				$foundAthlete = true;
-				$gender = $athlete['gender']=='M' ? 'M' : 'F';
-				$updateMemberStatement->bind_param('sss', $athlete['id'], $gender, $row['id']);
-				$updateMemberStatement->execute() or safeDie('Failed to update row '.mysqli_error($conn));
-			} else {
-				echo('<p>Mismatch on dob '.$athlete['dob']." vs ". $row['dob']);
-			}
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 11 ) {
+			return false;
 		}
-		if (!$foundAthlete) {
-			echo('<p><b>Athlete '.htmlescape( $athlete['name'] ).' not found in members table</b></p>');
-			continue;
-		}
-		$res->close();
-	}
 		
-	$count++;
-}
+		return ( $cells[4] == '<b>Name</b>' );
+	}
 
-$findMemberStmt1->close();
-$findMemberStmt2->close();
-$updateMemberStatement->close();
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 11 );
+	}
 
-$y = date("Y");
-$res= $conn->query("SELECT DISTINCT( powerOf10 ) FROM members WHERE year>=$y-1") or safeDie("Failed to query database");
-while ($row = $res->fetch_assoc()) {
-	$powerOf10 = $row['powerOf10'];
-	if (!empty($powerOf10)) {
-		powerOf10Download($debug, $conn, $powerOf10);
+	function getResultsFromRow( $cells ) {
+		// https://www.thepowerof10.info/results/results.aspx?meetingid=253252
+		// Expected cells
+		// 0 - Position
+		// 1 - MW ?
+		// 2 - AC ?
+		// 3 - Perf (time)
+		// 4 - Name - sometimes has a link
+		// 5 - AG (group)
+		// 6 - Gender
+		// 7 - Year
+		// 8 - Coach
+		// 9 - Club
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = getCell( $cells[1] );
+		$thisResult['Ac']       = getCell( $cells[2] );
+		$thisResult['Time']     = getCell( $cells[3] );
+		$thisResult['Name']     = getTextFromLink( $cells[4] );
+		$thisResult['Group']    = getCell( $cells[5] );
+		$thisResult['Club']     = getCell( $cells[9] );
+		return $thisResult;
 	}
 }
 
-$conn->close();
-*/
+class P10Format2 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 11 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 11 ) {
+			return false;
+		}
+		
+		return ( $cells[2] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=268712
+		// 0 - Position
+		// 1 - Perf (time)
+		// 2 - Name - sometimes has a link
+		// 3 - Unknown (only seen blank)
+		// 4 - AG (group)
+		// 5 - Gender
+		// 6 - Coach
+		// 7 - Club
+		// 8 - SB
+		// 9 - PB
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = '';
+		$thisResult['Ac']       = '';
+		$thisResult['Time']     = getCell( $cells[1] );
+		$thisResult['Name']     = getTextFromLink( $cells[2] );
+		$thisResult['Group']    = getCell( $cells[4] );
+		$thisResult['Club']     = getCell( $cells[7] );
+		return $thisResult;
+	}
+
+}
+
+class P10Format3 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 10 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+
+		if ( count( $cells ) !== 10 ) {
+			return false;
+		}
+		
+		return ( $cells[3] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=252950
+		// 0 - Position
+		// 1 - AC
+		// 2 - Perf (time)
+		// 3 - Name - sometimes has a link
+		// 4 - AG (group)
+		// 5 - Gender
+		// 6 - Year
+		// 7 - Coach
+		// 8 - Club
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = '';
+		$thisResult['Ac']       = getCell( $cells[1] );
+		$thisResult['Time']     = getCell( $cells[2] );
+		$thisResult['Name']     = getTextFromLink( $cells[3] );
+		$thisResult['Group']    = getCell( $cells[4] );
+		$thisResult['Club']     = getCell( $cells[8] );
+		return $thisResult;
+	}
+}
+
+class P10Format4 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 12 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 12 ) {
+			return false;
+		}
+		
+		return ( $cells[3] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=268703
+		// 0 - Position
+		// 1 - Perf (time)
+		// 2 - Unknown (only seen A)
+		// 3 - Name - sometimes has a link
+		// 4 - Unknown (only seen blank)
+		// 5 - AG (group)
+		// 6 - Gender
+		// 7 - Coach
+		// 8 - Club
+		// 9 - SB
+		// 10 - PB
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = '';
+		$thisResult['Ac']       = '';
+		$thisResult['Time']     = getCell( $cells[1] );
+		$thisResult['Name']     = getTextFromLink( $cells[3] );
+		$thisResult['Group']    = getCell( $cells[5] );
+		$thisResult['Club']     = getCell( $cells[8] );
+		return $thisResult;
+	}
+}
+
+class P10Format5 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 9 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 9 ) {
+			return false;
+		}
+		
+		return ( $cells[3] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=269693
+		// 0 - Position
+		// 1 - MW
+		// 2 - Perf (time)
+		// 3 - Name - sometimes has a link
+		// 4 - AG (group)
+		// 5 - Gender
+		// 6 - Coach
+		// 7 - Club
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Mw']       = getCell( $cells[1] );
+		$thisResult['Ac']       = '';
+		$thisResult['Time']     = getCell( $cells[2] );
+		$thisResult['Name']     = getTextFromLink( $cells[3] );
+		$thisResult['Group']    = getCell( $cells[4] );
+		$thisResult['Club']     = getCell( $cells[7] );
+		return $thisResult;
+	}
+}
 
 ?>

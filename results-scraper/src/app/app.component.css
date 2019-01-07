@@ -2,4 +2,58 @@ body{
 	background-color: black;
 	padding: 5px;
 	margin: 5px;
+    font-family: helvetica, arial;
+	color: #eeeeee;
+}
+
+input {
+	background-color: #dddddd;
+	border: 1px solid #dddddd;
+}
+
+.help {
+	float: left;
+}
+
+.help p {
+	font-weight: lighter;
+	font-size: 14px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+.label {
+	font-weight: lighter;
+	font-size: 14px;
+	padding-bottom: 5px;
+
+}
+
+.container {
+	border: 2px solid #aaaaaa;  
+	border-radius: 4px;
+	margin-bottom: 5px;
+}
+
+.criteriaHolder {
+	padding: 4px;
+	height: 80px;
+}
+
+.criteria {
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.racesHolder {
+	height:150px;
+	overflow: hidden;
+	overflow-y: scroll;
+	padding: 9px;
+	font-size: 18px;      
+}
+
+.resultsHolder {
+	padding: 4px;
 }

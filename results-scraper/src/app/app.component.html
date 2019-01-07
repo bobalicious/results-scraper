@@ -1,16 +1,38 @@
 <html>
   <body>
-    <div style="height:150px;">
-	    <input [(ngModel)]="searchCriteria.dateFrom" placeholder="Date From">
-	    <input [(ngModel)]="searchCriteria.dateTo"   placeholder="Date To">
-	    <input [(ngModel)]="searchCriteria.venue"    placeholder="Venue">
-	    <input [(ngModel)]="searchCriteria.meeting"  placeholder="Meeting">
-	    <button (click)="handleClickedSearch()" ></button>
+    <div class="criteriaHolder container" >
+      <div class="help">
+        <p>If you put in a "date to", you must also put in a "date from"</p>
+        <p>After you have performed a search, click on the race name to generate the results list.</p>
+        <p>If it doesn't return anything, it's because the results format hasn't been recognised by the app.</p>
+        <p>Send me (Rob) the race details and I'll take a look.</p>
+        <p>It currently only returns the first page of runners, so large events will not be complete.  Yet.</p>
+      </div>
+      <div class="criteria">
+  	    <div class="label">Date From (dd-Mon-yyyy):</div>
+        <div class="input"><input [(ngModel)]="searchCriteria.dateFrom" placeholder="Date From"></div>
+      </div>
+      <div class="criteria">
+  	    <div class="label">Date To (dd-Mon-yyyy):</div>
+        <div class="input"><input [(ngModel)]="searchCriteria.dateTo"   placeholder="Date To"></div>
+      </div>
+      <div class="criteria">
+  	    <div class="label">Venue: </div>
+        <div class="input"><input [(ngModel)]="searchCriteria.venue"    placeholder="Venue"></div>
+      </div>
+      <div class="criteria">
+  	    <div class="label">Meeting: </div>
+        <div class="input"><input [(ngModel)]="searchCriteria.meeting"  placeholder="Meeting"></div>
+      </div>
+      <div class="criteria">
+        <div class="label">&nbsp;</div>
+  	    <div class="input"><button (click)="handleClickedSearch()" >Search</button></div>
+      </div>
     </div>
-    <div style="height:150px; overflow: hidden; overflow-y: scroll; padding: 10px;">
+    <div class="racesHolder container" >
       <app-race-list-renderer [races]=selectableRaces (raceSelected)="onRaceSelected($event)"></app-race-list-renderer>
     </div>
-    <div>
+    <div class="resultsHolder container">
       <app-results-renderer [races]=races></app-results-renderer>
     </div>
   </body>

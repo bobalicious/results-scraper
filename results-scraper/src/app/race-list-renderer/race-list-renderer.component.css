@@ -1,0 +1,13 @@
+
+	ul {
+		margin-block-start: 0px !important;
+		padding-inline-start: 0px;
+	}
+
+	li {
+		list-style-type: none;
+	}
+
+	li:hover {
+		cursor: pointer;
+	}

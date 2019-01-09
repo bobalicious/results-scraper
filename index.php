@@ -49,8 +49,9 @@
 		}
 
 		if ( $_GET['mode'] == 'raceResults' ) {
-			$meetingId = $_GET['id'];
-			$return = readResults( $debug, $meetingId );
+			$meetingId  = $_GET['id'];
+			$pageNumber = isset( $_GET['page'] ) ? $_GET['page'] : 1;
+			$return = readResults( $debug, $meetingId, $pageNumber );
 		}
 
 	}

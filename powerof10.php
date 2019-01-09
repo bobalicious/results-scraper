@@ -167,36 +167,8 @@ function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch )
 
 }
 
-// TODO: needs to load multiple pages - or does it?
-function readResults( $debug, $meetingId ) {
 
-	$results    = array();
-	$pageNumber = 1;
-	$getResults = true;
-
-	while( $getResults ) {
-
-		$newResults = readResultsPage( $debug, $meetingId, $pageNumber );
-
-		if ( count( $newResults ) > 0 ) {
-			// TODO: merge the results
-			$results = $newResults;
-			$pageNumber++;
-			$getResults = false;
-		} else {
-			$getResults = false;
-		}
-
-		if ( $pageNumber > 5 ) {
-			$getResults = false;
-		}
-
-	}
-
-	return $results;
-}
-
-function readResultsPage( $debug, $meetingId, $pageNumber ) { 
+function readResults( $debug, $meetingId, $pageNumber ) { 
 
 	$formats = array( new P10Format1()
 					, new P10Format2()

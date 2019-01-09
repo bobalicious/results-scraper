@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ResultsRendererComponent } from './results-renderer/results-renderer.component';
 import { ResultsService } from './results.service';
 import { RaceListRendererComponent } from './race-list-renderer/race-list-renderer.component';
+import { OrdinalPipe } from './ordinal.pipe';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { RaceListRendererComponent } from './race-list-renderer/race-list-render
     AppComponent,
     ResultsRendererComponent,
     RaceListRendererComponent,
+    OrdinalPipe,
   ],
   imports: [
     BrowserModule,

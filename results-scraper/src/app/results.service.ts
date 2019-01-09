@@ -15,7 +15,7 @@ export class ResultsService {
 	baseUrl    = 'http://localhost:8080/';
 
 
-	resultsUrl = this.baseUrl + '?mode=raceResults'; // &id=261986';
+	resultsUrl = this.baseUrl + '?mode=raceResults';
 	racesUrl   = this.baseUrl + '?mode=races';
 
 	constructor( private http: HttpClient ) { }
@@ -29,11 +29,12 @@ export class ResultsService {
 	    params = ( searchCriteria.venue    ? params.set( 'venue'   , searchCriteria.venue    ) : params );
 	    params = ( searchCriteria.meeting  ? params.set( 'meeting' , searchCriteria.meeting  ) : params );
 
+	    // TODO: order by?
+
 		return this.http.get<Race[]>( this.racesUrl, { params: params } );
 	}
 
-	getResults( meetingId : string ) : Observable<Result[]> {
-		return this.http.get<Result[]>( this.resultsUrl + '&id=' + meetingId );
+	getResults( meetingId : string, page : string ) : Observable<Result[]> {
+		return this.http.get<Result[]>( this.resultsUrl + '&id=' + meetingId + '&page=' + page );
 	}
-
 }

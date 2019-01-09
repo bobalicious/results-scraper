@@ -4,9 +4,8 @@
       <div class="help">
         <p>If you put in a "date to", you must also put in a "date from"</p>
         <p>After you have performed a search, click on the race name to generate the results list.</p>
-        <p>If it doesn't return anything, it's because the results format hasn't been recognised by the app.</p>
-        <p>Send me (Rob) the race details and I'll take a look.</p>
-        <p>It currently only returns the first page of runners, so large events will not be complete.  Yet.</p>
+        <p>If it doesn't return anything, it my be because the results format hasn't been recognised by the app.</p>
+        <p>Check on PowerOf10, and if the results exist, send me (Rob) the race details and I'll take a look when I can.</p>
       </div>
       <div class="criteria">
   	    <div class="label">Date From (dd-Mon-yyyy):</div>
@@ -38,6 +37,7 @@
         <div class="label">&nbsp;</div>
         <div class="input"><button (click)="handleClickedFilter()" >Filter</button></div>
       </div>
+      
     </div>
     <div class="racesHolder container" >
       <app-race-list-renderer [races]=selectableRaces (raceSelected)="onRaceSelected($event)"></app-race-list-renderer>

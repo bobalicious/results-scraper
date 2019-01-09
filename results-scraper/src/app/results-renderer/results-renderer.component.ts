@@ -12,5 +12,7 @@ export class ResultsRendererComponent {
   @Input()
   races: Race[];
 
+  clubFilter: string;
+
   constructor() { }
 }

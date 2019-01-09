@@ -157,7 +157,7 @@ function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch )
 		$thisRace['MeetingId']     = getMeetingIdFromLink( $rawVenueName );
 		$thisRace['MeetingType']   = $cells[3];
 		$thisRace['ResultsStatus'] = getTextFromLink( $cells[4] );
-		$thisRace['RaceFullName']  = $thisRace['MeetingName'] . ' (' . $thisRace['VenueName'] . ') - ' . $thisRace['MeetingType'];  
+		$thisRace['RaceFullName']  = $thisRace['MeetingName'] . ' - ' . $thisRace['MeetingType'];  
 
 		$races[] = $thisRace;
 

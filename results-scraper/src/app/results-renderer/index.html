@@ -1,0 +1,24 @@
+<html>
+
+	<script>
+
+	function handleChange() {
+		console.log( 'handleChange' );
+	}
+
+	</script>
+<body>
+
+
+	<div id="grandparent" onchange="handleChange();">
+		<div id="parent">
+			<div id="child">
+				<input onchange="handleChange();"/>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+</html>

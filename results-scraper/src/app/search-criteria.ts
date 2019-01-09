@@ -1,6 +1,7 @@
 export class SearchCriteria {
-	dateFrom : string;
-	dateTo   : string;
-	venue    : string;
-	meeting  : string;
+	dateFrom   : string;
+	dateTo     : string;
+	venue      : string;
+	meeting    : string;
+	clubFilter : string;
 }

@@ -28,6 +28,16 @@
         <div class="label">&nbsp;</div>
   	    <div class="input"><button (click)="handleClickedSearch()" >Search</button></div>
       </div>
+
+
+      <div class="criteria">
+          <div class="label">Club Filter:</div>
+        <div class="input"><input [(ngModel)]="searchCriteria.clubFilter" placeholder="Filter Club"></div>
+      </div>
+      <div class="criteria">
+        <div class="label">&nbsp;</div>
+        <div class="input"><button (click)="handleClickedFilter()" >Filter</button></div>
+      </div>
     </div>
     <div class="racesHolder container" >
       <app-race-list-renderer [races]=selectableRaces (raceSelected)="onRaceSelected($event)"></app-race-list-renderer>

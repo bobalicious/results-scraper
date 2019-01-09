@@ -1,8 +1,12 @@
 <div *ngIf="races">
+
 	<div *ngFor="let race of races">
 		<h5 class="font_5" style="font-size:20px;">
 			<span style="color:#FFFFFF;">
+				<span style="font-size:20px;">{{race.RaceFullName}}</span>
+<!--
 				<span style="font-size:20px;">{{race.MeetingName}}: {{race.MeetingType}} {{race.RaceSubName}}</span>
+-->
 			</span>
 		</h5>
 		
@@ -12,12 +16,14 @@
 
 		<h6 class="font_6">&nbsp;</h6>	
 
-		<h6 *ngFor="let runner of race.Results" class="font_6">
+		<h6 *ngFor="let runner of race.FilteredResults" class="font_6">
 			<span style="color:#d5d5d5;">
 				<span style="font-style:normal;">
 					<span style="font-family:avenir-lt-w01_35-light1475496,sans-serif;">
 						<span style="font-weight:400;">
-							<span style="font-size:18px;">{{runner.Name}} - {{runner.Time}}&nbsp;({{runner.Group}}) = {{runner.Club}}</span>
+							<span style="font-size:18px;">{{runner.Name}} - {{runner.Time}}&nbsp;({{runner.Group}})
+								<span *ngIf="race.showClub"> - {{runner.Club}}</span>
+							</span>
 						</span>
 					</span>
 				</span>

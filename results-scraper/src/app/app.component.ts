@@ -14,20 +14,20 @@ export class AppComponent implements OnInit {
 	/*
 	Task list:
 
+		* Set the race sub-name properly
+		* Put on a loading indicator
 		* Find more recent race results that do not show
-
-		Finding the right race:
-			* Pass filters into the race search API
+		* lowercase all the race and result properties
+		* lowercase in the filter
 
 		Rendering the results:
 			* Filter the runners to only QPH runners (enter in input)
 			* Add a position in category
 			* Add a 'load next page' loop
+			* Take a look at the final output, make sure it's right
 
 		General things
 			* Fix the 'get race' API race-subname
-			* Consider the paging thing
-			* Load up the Run Britian results
 
 		Stretch goals
 			* Try to put on an indicator that a race has a QP runner in the first page
@@ -45,7 +45,8 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		console.log( 'init' );
-		this.searchCriteria = new SearchCriteria();		
+		this.searchCriteria = new SearchCriteria();
+		this.searchCriteria.clubFilter = 'Queens Park';	
 		this.getRaces();
 	}
 
@@ -56,6 +57,10 @@ export class AppComponent implements OnInit {
 
 	handleClickedSearch() {
 		this.getRaces();
+	}
+
+	handleClickedFilter() {
+		this.filterResults();
 	}
 
 	getRaces() {
@@ -76,11 +81,17 @@ export class AppComponent implements OnInit {
 																				race.MeetingType   = this.selectedRace.MeetingType;
 																				race.ResultsStatus = this.selectedRace.ResultsStatus;
 																				race.RaceFullName  = this.selectedRace.RaceFullName;
-																				race.RaceSubName   = "4.5MXC SW";
-																				console.log( 'went round once' );
+																				race.RaceSubName   = "4.5MXC SW";  // TODO: fix this!
+	 			console.log( 'Building the race from:' );
+	 			console.log( this.selectedRace );
+	 			console.log( raceToProcess );
 																				return race;
 																			 	});
+									this.filterResults();
 							  	});
 	}
 
+	filterResults() {
+		this.races && this.races.forEach( ( element, key ) => { element.filterResults( this.searchCriteria.clubFilter ) } );
+	}
 }

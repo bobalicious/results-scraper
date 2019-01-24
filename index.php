@@ -9,7 +9,7 @@
 	require_once( 'powerof10.php' );
 	require_once( 'keyfunctions.php' );
 
-	$return = [ 'error' => 'A valid mode was not specified' ];
+	$return = [ 'error' => 'A valid mode was not specified - did you mean to go to index.html instead?' ];
 
 	if ( isset( $_GET['mode'] ) ) {
 

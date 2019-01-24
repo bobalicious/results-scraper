@@ -4,7 +4,7 @@ import { Result } from './result';
 import { Race } from './race';
 import { SearchCriteria } from './search-criteria';
 import { HttpClient, HttpParams } from '@angular/common/http';
-
+import { environment } from '../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,8 +12,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class ResultsService {
 
 //	baseUrl    = 'https://results-scraper.herokuapp.com/';
-	baseUrl    = 'http://localhost:8080/';
+	baseUrl    = environment.resutsServiceBaseUrl; // 'http://localhost:8080/';
 
+
+//	console.log( baseUrl );
 
 	resultsUrl = this.baseUrl + '?mode=raceResults';
 	racesUrl   = this.baseUrl + '?mode=races';

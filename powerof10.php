@@ -177,6 +177,7 @@ function readResults( $debug, $meetingId, $pageNumber ) {
 					, new P10Format5()
 					, new P10Format6()
 					, new P10Format7()
+					, new P10Format8()
 					, new RunBritainFormat()
 					, new RunBritainFormat2()
 					);
@@ -576,6 +577,40 @@ class P10Format7 {
 		$thisResult['Name']     = getTextFromLink( $cells[4] );
 		$thisResult['Group']    = getCell( $cells[5] );
 		$thisResult['Club']     = getCell( $cells[8] );
+		return $thisResult;
+	}
+}
+
+// TODO: for https://www.thepowerof10.info/results/results.aspx?meetingid=253145
+class P10Format8 {
+
+	function isResultsRow( $cells ) {
+		return ( count( $cells ) == 9 );
+	}
+
+	function headerRowMatchesFormat( $cells ) {
+		if ( count( $cells ) !== 9 ) {
+			return false;
+		}
+		return ( $cells[2] == '<b>Name</b>' );
+	}
+
+	function getResultsFromRow( $cells ) {
+		// E.g. https://www.thepowerof10.info/results/results.aspx?meetingid=253007
+		// 0 - Position
+		// 1 - Time
+		// 2 - Name
+		// 3 - AG (group)
+		// 4 - Gender
+		// 5 - Year
+		// 6 - Coach
+		// 7 - Club
+		// 8 - Mail link
+		$thisResult['Position'] = getCell( $cells[0] );
+		$thisResult['Time']     = getCell( $cells[1] );
+		$thisResult['Name']     = getTextFromLink( $cells[2] );
+		$thisResult['Group']    = getCell( $cells[3] );
+		$thisResult['Club']     = getCell( $cells[7] );
 		return $thisResult;
 	}
 }

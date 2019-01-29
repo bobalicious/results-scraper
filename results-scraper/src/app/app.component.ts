@@ -14,10 +14,7 @@ export class AppComponent implements OnInit {
 	/*
 	Task list:
 
-		* Sort out deployment to Heroku
-
 		* Put on a loading indicator
-		* Find more recent race results that do not show
 		* lowercase all the race and result properties
 		* Order the races properly
 
@@ -38,10 +35,13 @@ export class AppComponent implements OnInit {
 	constructor( private resultsService: ResultsService ) { }
 
 	ngOnInit() {
-		console.log( 'init' );
 		this.searchCriteria = new SearchCriteria();
-		this.searchCriteria.clubFilter = 'Queens Park';	
-		this.getRaces();
+		this.searchCriteria.clubFilter = 'Queens Park';
+/*		this.searchCriteria.dateFrom   = '23-Jan-2019';
+		this.searchCriteria.dateTo     = '23-Jan-2019';
+		this.searchCriteria.meeting    = 'Wake';
+*/
+//		this.getRaces();
 	}
 
 	onRaceSelected( race : Race ) {
@@ -59,31 +59,81 @@ export class AppComponent implements OnInit {
 
 	getRaces() {
 		this.resultsService.getRaces( this.searchCriteria )
-			.subscribe( races => this.selectableRaces = races );
+			.subscribe( races => {
+									this.selectableRaces = races;
+									this.checkForRunnersInAnyRace( races );
+								 } );
+	}
+
+	checkForRunnersInAnyRace( races ) {
+		races && races.length && this.checkForRunnersInThisRace( races[0], races.slice( 1 ) );
+	}
+
+	checkForRunnersInThisRace( race, remainingRaces ) {
+
+		let racesWeAreLookingFor = this.selectableRaces.filter( thisSelectableRace => { return ( thisSelectableRace.MeetingId == race.MeetingId ) } );
+
+		if ( racesWeAreLookingFor ) {
+			racesWeAreLookingFor.forEach( thisRaceWeAreLookingFor => { thisRaceWeAreLookingFor.searchingForMatchingRunners = true } );
+			this.getResultsFromPage( race.MeetingId
+								   , ( results, willSearchForMore )  => {
+														   					let foundRunner = this.checkForRunnerInResults( race.MeetingId, results );
+														   					if ( foundRunner || !willSearchForMore ) {
+																				racesWeAreLookingFor.forEach( thisRaceWeAreLookingFor => { thisRaceWeAreLookingFor.searchingForMatchingRunners = false } );														   						
+															   					this.checkForRunnersInAnyRace( remainingRaces );
+														   					}
+														   					return !foundRunner;
+																	    }
+								   , 1, 5 );			
+		}
+	}
+
+	checkForRunnerInResults( meetingId, results ) {
+
+		let foundRunner = false;
+
+		if ( results ) {
+			let newRaces = results.map( raceToProcess => {
+													  	let race           = new Race();
+													  	race.MeetingId     = meetingId;
+													  	race.MeetingName   = raceToProcess['Name'];
+													  	race.Results       = raceToProcess['Results'];
+														race.RaceSubName   = raceToProcess['Name'];
+														return race;
+													 	});
+
+			newRaces.forEach( ( raceWithPotentialRunners, key ) => {
+														raceWithPotentialRunners.filterResults( this.searchCriteria.clubFilter );
+														if ( raceWithPotentialRunners.hasResults ) {
+															let racesWithRunners = this.selectableRaces.filter( thisSelectableRace => { return ( thisSelectableRace.MeetingId == raceWithPotentialRunners.MeetingId ) } );
+															racesWithRunners.forEach( thisRaceWithRunners => ( thisRaceWithRunners.hasRunnersMatchingFilter = true ) );
+															racesWithRunners && ( foundRunner = true );
+														}
+													} );
+		}
+		return foundRunner;
 	}
 
 	getResults() {
 		this.races     = [];
-		this.getResultsFromPage( 1 );
+		this.getResultsFromPage( this.selectedRace.MeetingId, results => { this.addResults( results ); return true; } );
 	}
 
-	getResultsFromPage( pageNumber ) {
+	getResultsFromPage( meetingId, resultsCallback, pageNumber, maximumPages ) {
 
-		console.log( 'Loading results from page: ' + pageNumber );
-		this.resultsService.getResults( this.selectedRace.MeetingId, pageNumber )
+		pageNumber || ( pageNumber = 1 );
+
+		this.resultsService.getResults( meetingId, pageNumber, maximumPages )
 	 		.subscribe( results => {
-	 								if ( results.length > 0 ) {
+	 									let willSearchForMore = ( results.length > 0 && ( !maximumPages || pageNumber < maximumPages ) );
 	 									pageNumber++;
-	 									this.addResults( results );
-	 									this.getResultsFromPage( pageNumber );
-	 								} else {
-										console.log( 'Run out of results to load' );
-	 								}
-							  	});
+	 									! resultsCallback( results, willSearchForMore ) && ( willSearchForMore = false );
 
+	 									willSearchForMore && this.getResultsFromPage( meetingId, resultsCallback, pageNumber, maximumPages );
+								  	});
 	}
 
-	addResults( results ) {
+	addResults( results, willSearchForMore ) {
 
 		let newRaces = results.map( raceToProcess => {
 												  	let race           = new Race();
@@ -99,7 +149,7 @@ export class AppComponent implements OnInit {
 													return race;
 												 	});
 
-		newRaces.forEach( ( thisNewRace, key) => {
+		newRaces.forEach( ( thisNewRace, key ) => {
 
 			let existingRaces = this.races.filter( ( thisExistingRace ) =>  { return ( thisExistingRace.RaceSubName === thisNewRace.RaceSubName ) } );
 

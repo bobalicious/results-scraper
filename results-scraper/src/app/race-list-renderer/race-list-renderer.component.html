@@ -2,7 +2,10 @@
 
 	<ul>
 		<div *ngFor="let race of races">
-			<li (click)="handleClickedRace(race)">{{race.RawDate}}: {{race.MeetingName}}: {{race.MeetingType}} @ {{race.VenueName}}</li>
+			<li (click)="handleClickedRace(race)">{{race.RawDate}}: {{race.MeetingName}}: {{race.MeetingType}} @ {{race.VenueName}}
+				<i *ngIf="race.hasRunnersMatchingFilter" class="foundRunners">(found matching runners)</i>
+				<i *ngIf="race.searchingForMatchingRunners">(looking for matching runners)</i>
+			</li>
 		</div>
 	</ul>
 </div>

@@ -15,6 +15,9 @@ export class Race {
 	showClub        : boolean = true;
 	hasResults      : boolean = false;
 
+	hasRunnersMatchingFilter    : boolean = false;
+	searchingForMatchingRunners : boolean = false;
+
 	constructor() {
 	}
 

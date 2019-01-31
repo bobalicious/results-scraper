@@ -226,7 +226,7 @@ function readResults( $debug, $meetingId, $pageNumber ) {
 			continue;
 		}
 
-		if ( $cells[0] === '<b>Pos</b>' || ( isset( $cells[1] ) && $cells[1] === '<b>Pos</b>' ) ) {
+		if ( isset( $cells[0] ) && ( $cells[0] === '<b>Pos</b>' || ( isset( $cells[1] ) && $cells[1] === '<b>Pos</b>' ) ) ) {
 
 			// Is a header row, so a new formatter may be required
 			$format = null;

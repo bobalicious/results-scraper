@@ -1,3 +1,4 @@
 TODO:
 
+* When you run a new search, it continues to look at the old list of races for runners - it should stop
 * Move the index.php over to api.php or similar

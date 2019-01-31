@@ -116,14 +116,14 @@ export class AppComponent implements OnInit {
 
 	getResults() {
 		this.races     = [];
-		this.getResultsFromPage( this.selectedRace.MeetingId, results => { this.addResults( results ); return true; } );
+		this.getResultsFromPage( this.selectedRace.MeetingId, results => { this.addResults( results, true ); return true; }, null, null );
 	}
 
 	getResultsFromPage( meetingId, resultsCallback, pageNumber, maximumPages ) {
 
 		pageNumber || ( pageNumber = 1 );
 
-		this.resultsService.getResults( meetingId, pageNumber, maximumPages )
+		this.resultsService.getResults( meetingId, pageNumber )
 	 		.subscribe( results => {
 	 									let willSearchForMore = ( results.length > 0 && ( !maximumPages || pageNumber < maximumPages ) );
 	 									pageNumber++;

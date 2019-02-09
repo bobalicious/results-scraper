@@ -2,10 +2,8 @@
   <body>
     <div class="criteriaHolder container" >
       <div class="help">
-        <p>If you put in a "date to", you must also put in a "date from"</p>
         <p>After you have performed a search, click on the race name to generate the results list.</p>
-        <p>If it doesn't return anything, it my be because the results format hasn't been recognised by the app.</p>
-        <p>Check on PowerOf10, and if the results exist, send me (Rob) the race details and I'll take a look when I can.</p>
+        <p>If it doesn't return anything, it may be because the format isn't recognised by the app.  Check on PowerOf10, and if the results exist, send me (Rob) the race details.</p>
       </div>
       <div class="criteria">
   	    <div class="label">Date From (dd-Mon-yyyy):</div>
@@ -20,23 +18,28 @@
         <div class="input"><input [(ngModel)]="searchCriteria.venue"    placeholder="Venue"></div>
       </div>
       <div class="criteria">
+        <div class="label">Exclude Venues: </div>
+        <div class="input"><input [(ngModel)]="searchCriteria.excludeVenuesFilter"  placeholder="Venues Meetings"></div>
+      </div>
+      <div class="criteria">
   	    <div class="label">Meeting: </div>
         <div class="input"><input [(ngModel)]="searchCriteria.meeting"  placeholder="Meeting"></div>
       </div>
       <div class="criteria">
-        <div class="label">&nbsp;</div>
-  	    <div class="input"><button (click)="handleClickedSearch()" >Search</button></div>
-      </div>
-
-
-      <div class="criteria">
           <div class="label">Club Filter:</div>
         <div class="input"><input [(ngModel)]="searchCriteria.clubFilter" placeholder="Filter Club"></div>
       </div>
+
       <div class="criteria">
         <div class="label">&nbsp;</div>
-        <div class="input"><button (click)="handleClickedFilter()" >Filter</button></div>
+        <div class="input"><button (click)="handleClickedSearchForRaces()">Search for Races</button></div>
       </div>
+
+      <div class="criteria">
+        <div class="label">&nbsp;</div>
+        <div class="input"><button (click)="handleClickedSearchForRunners()" [className]="racesReturned()?'enabled':'disabled'" >Search for Runners</button></div>
+      </div>
+
       
     </div>
     <div class="racesHolder container" >

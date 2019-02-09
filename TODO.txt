@@ -1,4 +1,15 @@
 TODO:
 
+* Add a button to start the 'search for runners'
 * When you run a new search, it continues to look at the old list of races for runners - it should stop
 * Move the index.php over to api.php or similar
+* Put on a loading indicator
+* Order the races properly
+* Decent default on the dates
+
+Low priority:
+
+* Add a position in category
+* Add Date pickers
+* Search on 'enter'
+* lowercase all the race and result properties

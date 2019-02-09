@@ -11,8 +11,19 @@ input {
 	border: 1px solid #dddddd;
 }
 
+button {
+	background-color: #E21C21;
+	color:#eeeeee;
+}
+
+button.disabled {
+	color: #E21C21;
+	background-color:#eeeeee;
+
+}
+
 .help {
-	float: left;
+	padding-bottom: 5px;
 }
 
 .help p {

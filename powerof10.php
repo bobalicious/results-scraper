@@ -81,10 +81,12 @@ function readAthletes( $debug ) {
 	return $athletes;
 }
 
-function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch ) {
+function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch, $venuesFilter ) {
 
 	$searchUrl = RACES_BASE_URL;
 	$searchParameters = array();
+
+	$expandedVenuesFilter = [];
 
 	if ( $startDate ) {
 		$searchParameters[] = 'datefrom=' . urlencode( $startDate );
@@ -100,6 +102,10 @@ function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch )
 
 	if ( $venueSearch ) {
 		$searchParameters[] = 'venue=*' . urlencode( $venueSearch ) . '*';
+	}
+
+	if ( $venuesFilter ) {
+		$expandedVenuesFilter = explode( ',', $venuesFilter );
 	}
 
 	if ( $searchParameters ) {
@@ -162,6 +168,15 @@ function readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch )
 		$races[] = $thisRace;
 
 	}
+
+	foreach( $races as $index => $thisRace ) {
+		foreach( $expandedVenuesFilter as $thisExpandedFilter ) {
+			if ( strpos( $thisRace['VenueName'], trim( $thisExpandedFilter ) ) !== false ) {
+				unset( $races[ $index ] );
+			}
+		}
+	}
+	$races = array_values( $races );
 
 	return $races;
 

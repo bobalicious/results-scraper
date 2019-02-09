@@ -18,6 +18,7 @@
 			$startDate     = '';
 			$endDate       = '';
 			$meetingSearch = '';
+			$meetingFilter = '';
 			$venueSearch   = '';
 
 			if ( isset( $_GET['datefrom'] ) ) {
@@ -36,7 +37,12 @@
 				$venueSearch = $_GET['venue'];
 			}
 
-			$return = readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch );
+
+			if ( isset( $_GET['venuesFilter'] ) ) {
+				$venuesFilter = $_GET['venuesFilter'];
+			}
+
+			$return = readRaces( $debug, $startDate, $endDate, $meetingSearch, $venueSearch, $venuesFilter );
 		}
 
 		if ( $_GET['mode'] == 'athletes' ) {

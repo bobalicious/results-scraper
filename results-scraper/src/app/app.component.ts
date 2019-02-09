@@ -11,21 +11,6 @@ import { SearchCriteria } from './search-criteria';
 })
 export class AppComponent implements OnInit {
  
-	/*
-	Task list:
-
-		* Put on a loading indicator
-		* lowercase all the race and result properties
-		* Order the races properly
-
-		Rendering the results:
-			* Add a position in category
-
-		Stretch goals
-			* Try to put on an indicator that a race has a QP runner in the first page
-
-	*/
-
 	races          : Race[];
 	selectableRaces: Race[];
 	selectedRace   : Race;
@@ -36,12 +21,14 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		this.searchCriteria = new SearchCriteria();
-		this.searchCriteria.clubFilter = 'Queens Park';
-/*		this.searchCriteria.dateFrom   = '23-Jan-2019';
-		this.searchCriteria.dateTo     = '23-Jan-2019';
-		this.searchCriteria.meeting    = 'Wake';
-*/
+		this.searchCriteria.clubFilter          = 'Queens Park';
+		this.searchCriteria.excludeVenuesFilter = 'USA,ESP';
+
 //		this.getRaces();
+	}
+
+	racesReturned() {
+		return ( this.selectableRaces && this.selectableRaces.length > 0 );
 	}
 
 	onRaceSelected( race : Race ) {
@@ -49,19 +36,19 @@ export class AppComponent implements OnInit {
 		this.getResults();
 	}
 
-	handleClickedSearch() {
+	handleClickedSearchForRaces() {
 		this.getRaces();
 	}
 
-	handleClickedFilter() {
-		this.filterResults();
+	handleClickedSearchForRunners() {
+		this.checkForRunnersInAnyRace( this.selectableRaces );
 	}
 
 	getRaces() {
 		this.resultsService.getRaces( this.searchCriteria )
 			.subscribe( races => {
 									this.selectableRaces = races;
-									this.checkForRunnersInAnyRace( races );
+//									this.checkForRunnersInAnyRace( races );
 								 } );
 	}
 

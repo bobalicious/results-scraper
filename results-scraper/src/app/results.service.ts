@@ -11,11 +11,7 @@ import { environment } from '../environments/environment';
 })
 export class ResultsService {
 
-//	baseUrl    = 'https://results-scraper.herokuapp.com/';
-	baseUrl    = environment.resutsServiceBaseUrl; // 'http://localhost:8080/';
-
-
-//	console.log( baseUrl );
+	baseUrl    = environment.resutsServiceBaseUrl;
 
 	resultsUrl = this.baseUrl + '?mode=raceResults';
 	racesUrl   = this.baseUrl + '?mode=races';
@@ -26,10 +22,11 @@ export class ResultsService {
 
 	    let params = new HttpParams();
 
-	    params = ( searchCriteria.dateFrom ? params.set( 'datefrom', searchCriteria.dateFrom ) : params );
-	    params = ( searchCriteria.dateTo   ? params.set( 'dateto'  , searchCriteria.dateTo   ) : params );
-	    params = ( searchCriteria.venue    ? params.set( 'venue'   , searchCriteria.venue    ) : params );
-	    params = ( searchCriteria.meeting  ? params.set( 'meeting' , searchCriteria.meeting  ) : params );
+	    params = ( searchCriteria.dateFrom            ? params.set( 'datefrom'    , searchCriteria.dateFrom            ) : params );
+	    params = ( searchCriteria.dateTo              ? params.set( 'dateto'      , searchCriteria.dateTo              ) : params );
+	    params = ( searchCriteria.venue               ? params.set( 'venue'       , searchCriteria.venue               ) : params );
+	    params = ( searchCriteria.excludeVenuesFilter ? params.set( 'venuesFilter', searchCriteria.excludeVenuesFilter ) : params );
+	    params = ( searchCriteria.meeting             ? params.set( 'meeting'     , searchCriteria.meeting             ) : params );
 
 	    // TODO: order by?
 

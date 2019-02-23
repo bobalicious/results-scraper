@@ -2,8 +2,7 @@ TODO:
 
 * When you run a new search, it continues to look at the old list of races for runners - it should stop
 * Put on a loading indicator
-* Order the races properly
-* Decent default on the dates
+* Order the races properly - API doesn't support it, so needs to be done manually
 
 Low priority:
 

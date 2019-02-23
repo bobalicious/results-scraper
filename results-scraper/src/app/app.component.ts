@@ -24,7 +24,25 @@ export class AppComponent implements OnInit {
 		this.searchCriteria.clubFilter          = 'Queens Park';
 		this.searchCriteria.excludeVenuesFilter = 'USA,ESP';
 
-//		this.getRaces();
+		let todayEpoch = Date.now();
+		let today      = new Date( todayEpoch );
+		this.searchCriteria.dateTo = this.formatDateForSearch( today );
+
+		let oneWeekAgoEpoch = todayEpoch - 604800000;
+		let oneWeekAgo      = new Date( oneWeekAgoEpoch );
+		this.searchCriteria.dateFrom = this.formatDateForSearch( oneWeekAgo );
+
+	}
+
+	formatDateForSearch( dateToFormat: date ) {
+
+		let availableMonths = [ 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec' ];
+
+		let day   = dateToFormat.getDate();
+		let month = availableMonths[ dateToFormat.getMonth() ];
+		let year   = dateToFormat.getFullYear();
+
+		return day + '-' + month + '-' + year;
 	}
 
 	racesReturned() {

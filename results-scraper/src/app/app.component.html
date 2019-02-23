@@ -7,46 +7,47 @@
       </div>
       <div class="criteria">
   	    <div class="label">Date From (dd-Mon-yyyy):</div>
-        <div class="input"><input [(ngModel)]="searchCriteria.dateFrom" placeholder="Date From"></div>
+        <div class="input"><input [(ngModel)]="searchCriteria.dateFrom" placeholder="Date From" (keyup.enter)="getRaces()"></div>
       </div>
       <div class="criteria">
   	    <div class="label">Date To (dd-Mon-yyyy):</div>
-        <div class="input"><input [(ngModel)]="searchCriteria.dateTo"   placeholder="Date To"></div>
+        <div class="input"><input [(ngModel)]="searchCriteria.dateTo"   placeholder="Date To" (keyup.enter)="getRaces()"></div>
       </div>
       <div class="criteria">
   	    <div class="label">Venue: </div>
-        <div class="input"><input [(ngModel)]="searchCriteria.venue"    placeholder="Venue"></div>
+        <div class="input"><input [(ngModel)]="searchCriteria.venue"    placeholder="Venue" (keyup.enter)="getRaces()"></div>
       </div>
       <div class="criteria">
         <div class="label">Exclude Venues: </div>
-        <div class="input"><input [(ngModel)]="searchCriteria.excludeVenuesFilter"  placeholder="Venues Meetings"></div>
+        <div class="input"><input [(ngModel)]="searchCriteria.excludeVenuesFilter"  placeholder="Venues Meetings" (keyup.enter)="getRaces()"></div>
       </div>
       <div class="criteria">
   	    <div class="label">Meeting: </div>
-        <div class="input"><input [(ngModel)]="searchCriteria.meeting"  placeholder="Meeting"></div>
+        <div class="input"><input [(ngModel)]="searchCriteria.meeting"  placeholder="Meeting" (keyup.enter)="getRaces()"></div>
       </div>
       <div class="criteria">
           <div class="label">Club Filter:</div>
-        <div class="input"><input [(ngModel)]="searchCriteria.clubFilter" placeholder="Filter Club"></div>
+        <div class="input"><input [(ngModel)]="searchCriteria.clubFilter" placeholder="Filter Club" (keyup.enter)="getRaces()"></div>
       </div>
 
       <div class="criteria">
         <div class="label">&nbsp;</div>
-        <div class="input"><button (click)="handleClickedSearchForRaces()">Search for Races</button></div>
+        <div class="input"><button (click)="handleClickedSearchForRaces()" id="searchForRaces">Search for Races</button></div>
       </div>
 
       <div class="criteria">
         <div class="label">&nbsp;</div>
         <div class="input"><button (click)="handleClickedSearchForRunners()" [className]="racesReturned()?'enabled':'disabled'" >Search for Runners</button></div>
       </div>
-
-      
     </div>
+
     <div class="racesHolder container" >
       <app-race-list-renderer [races]=selectableRaces (raceSelected)="onRaceSelected($event)"></app-race-list-renderer>
     </div>
+
     <div class="resultsHolder container">
       <app-results-renderer [races]=races></app-results-renderer>
     </div>
+
   </body>
 </html>

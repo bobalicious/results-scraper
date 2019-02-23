@@ -13,8 +13,8 @@ export class ResultsService {
 
 	baseUrl    = environment.resutsServiceBaseUrl;
 
-	resultsUrl = this.baseUrl + '?mode=raceResults';
-	racesUrl   = this.baseUrl + '?mode=races';
+	resultsUrl = this.baseUrl + 'api.php?mode=raceResults';
+	racesUrl   = this.baseUrl + 'api.php?mode=races';
 
 	constructor( private http: HttpClient ) { }
 
